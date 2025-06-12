@@ -55,7 +55,7 @@ public class OrderViewController {
      * Отображение информации о конкретном заказе
      */
     @GetMapping("/{orderId}")
-    public String viewOrder(@PathVariable long orderId, Model model, RedirectAttributes redirectAttributes) {
+    public String viewOrder(@PathVariable(name = "orderId") long orderId, Model model, RedirectAttributes redirectAttributes) {
         Optional<Order> orderOptional = orderFacade.getOrderWithEntries(orderId);
 
         if (orderOptional.isPresent()) {
@@ -71,7 +71,7 @@ public class OrderViewController {
      * Отображение заказа по коду заказа
      */
     @GetMapping("/code/{orderCode}")
-    public String viewOrderByCode(@PathVariable String orderCode, Model model, RedirectAttributes redirectAttributes) {
+    public String viewOrderByCode(@PathVariable(name = "orderCode") String orderCode, Model model, RedirectAttributes redirectAttributes) {
         Optional<Order> orderOptional = orderFacade.getOrderByCodeWithEntries(orderCode);
 
         if (orderOptional.isPresent()) {
@@ -87,7 +87,7 @@ public class OrderViewController {
      * Отображение заказов конкретного пользователя
      */
     @GetMapping("/user/{userId}")
-    public String listUserOrders(@PathVariable long userId, Model model) {
+    public String listUserOrders(@PathVariable(name = "userId") long userId, Model model) {
         List<Order> userOrders = orderFacade.getUserOrders(userId);
         model.addAttribute("orders", userOrders);
         model.addAttribute("userId", userId);
@@ -128,7 +128,7 @@ public class OrderViewController {
      * Форма для редактирования заказа
      */
     @GetMapping("/{orderId}/edit")
-    public String showEditForm(@PathVariable long orderId, Model model, RedirectAttributes redirectAttributes) {
+    public String showEditForm(@PathVariable(name = "orderId") long orderId, Model model, RedirectAttributes redirectAttributes) {
         Optional<Order> orderOptional = orderFacade.getOrderWithEntries(orderId);
 
         if (orderOptional.isPresent()) {
@@ -144,7 +144,7 @@ public class OrderViewController {
      * Обработка формы редактирования заказа
      */
     @PostMapping("/{orderId}/edit")
-    public String updateOrder(@PathVariable long orderId, @ModelAttribute Order order, RedirectAttributes redirectAttributes) {
+    public String updateOrder(@PathVariable(name = "orderId") long orderId, @ModelAttribute Order order, RedirectAttributes redirectAttributes) {
         try {
             // Проверяем существование заказа
             if (!orderFacade.getOrderWithEntries(orderId).isPresent()) {
@@ -169,7 +169,7 @@ public class OrderViewController {
      * Удаление заказа
      */
     @PostMapping("/{orderId}/delete")
-    public String deleteOrder(@PathVariable long orderId, RedirectAttributes redirectAttributes) {
+    public String deleteOrder(@PathVariable(name = "orderId") long orderId, RedirectAttributes redirectAttributes) {
         try {
             boolean deleted = orderFacade.deleteOrder(orderId);
 
