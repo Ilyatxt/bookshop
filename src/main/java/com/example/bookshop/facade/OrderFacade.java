@@ -2,6 +2,9 @@ package com.example.bookshop.facade;
 
 import com.example.bookshop.model.Order;
 import com.example.bookshop.model.OrderEntry;
+import com.example.bookshop.model.OrderStatus;
+import com.example.bookshop.model.Book;
+import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.OrderEntryService;
 import com.example.bookshop.service.OrderService;
 import org.slf4j.Logger;
@@ -23,10 +26,12 @@ public class OrderFacade {
     private static final Logger log = LoggerFactory.getLogger(OrderFacade.class);
     private final OrderService orderService;
     private final OrderEntryService orderEntryService;
+    private final BookService bookService;
 
-    public OrderFacade(OrderService orderService, OrderEntryService orderEntryService) {
+    public OrderFacade(OrderService orderService, OrderEntryService orderEntryService, BookService bookService) {
         this.orderService = orderService;
         this.orderEntryService = orderEntryService;
+        this.bookService = bookService;
     }
 
     /**
@@ -161,6 +166,42 @@ public class OrderFacade {
         }
 
         return updatedOrder;
+    }
+
+    /**
+     * Добавить книгу в заказ пользователя. Создает новый заказ, если актуального нет.
+     */
+    @Transactional
+    public Order addBookToUserOrder(long userId, long bookId, int quantity) {
+        List<Order> orders = orderService.getOrdersByUserId(userId);
+        Order order = orders.stream()
+                .filter(o -> o.getStatus() != OrderStatus.PAID && o.getStatus() != OrderStatus.DECLINED)
+                .findFirst()
+                .orElse(null);
+
+        Book book = bookService.getBookById(bookId);
+
+        OrderEntry entry = new OrderEntry();
+        entry.setBookId(bookId);
+        entry.setQuantity(quantity);
+        entry.setUnitPrice(book.getPrice().doubleValue());
+
+        if (order == null) {
+            order = new Order();
+            order.setUserId(userId);
+            order.setOrderDate(OffsetDateTime.now());
+            order.setOrderCode("ORD-" + System.currentTimeMillis());
+            order.setCurrency(book.getCurrency());
+            order.setTotalPrice(book.getPrice().multiply(java.math.BigDecimal.valueOf(quantity)));
+            order.setEntries(java.util.List.of(entry));
+            return createOrderWithEntries(order);
+        } else {
+            entry.setOrderId(order.getId());
+            orderEntryService.createOrderEntry(entry);
+            order.setTotalPrice(order.getTotalPrice().add(book.getPrice().multiply(java.math.BigDecimal.valueOf(quantity))));
+            orderService.updateOrder(order);
+            return order;
+        }
     }
 
     /**
