@@ -46,8 +46,8 @@ public class OrderViewController {
      */
     @GetMapping
     public String listOrders(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
             Model model) {
 
         List<Order> orders = orderFacade.getOrdersPage(page, size);
@@ -203,8 +203,8 @@ public class OrderViewController {
      */
     @GetMapping("/search")
     public String searchOrdersByPeriod(
-            @RequestParam(required = false) LocalDate startDate,
-            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(name = "startDate", required = false) LocalDate startDate,
+            @RequestParam(name = "endDate", required = false) LocalDate endDate,
             Model model) {
 
         // Если даты не указаны, устанавливаем диапазон за последние 30 дней
@@ -245,8 +245,8 @@ public class OrderViewController {
      * Добавление позиции в заказ пользователя
      */
     @PostMapping("/buy")
-    public String processBuy(@RequestParam long bookId,
-                             @RequestParam int quantity,
+    public String processBuy(@RequestParam("bookId") long bookId,
+                             @RequestParam("quantity") int quantity,
                              java.security.Principal principal,
                              RedirectAttributes redirectAttributes) {
         User user = userDao.findByUsername(principal.getName()).orElseThrow();
