@@ -43,6 +43,18 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public Optional<User> findByUsername(String username) {
+        log.debug("Поиск пользователя по username: {}", username);
+        Optional<User> user = userDao.findByUsername(username);
+        if (user.isPresent()) {
+            log.debug("Пользователь {} найден", username);
+        } else {
+            log.debug("Пользователь {} не найден", username);
+        }
+        return user;
+    }
+
     /**
      * Регистрация нового пользователя
      */
