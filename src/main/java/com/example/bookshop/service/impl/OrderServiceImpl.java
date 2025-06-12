@@ -3,6 +3,7 @@ package com.example.bookshop.service.impl;
 import com.example.bookshop.dao.OrderDao;
 import com.example.bookshop.dao.OrderEntryDao;
 import com.example.bookshop.model.Order;
+import com.example.bookshop.model.OrderStatus;
 import com.example.bookshop.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +75,9 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Order createOrder(Order order) {
         log.info("Создание нового заказа");
+        if (order.getStatus() == null) {
+            order.setStatus(OrderStatus.NEW);
+        }
         return orderDao.save(order);
     }
 
