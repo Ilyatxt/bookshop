@@ -4,6 +4,7 @@ package com.example.bookshop.dao.impl;
 import com.example.bookshop.dao.OrderDao;
 import com.example.bookshop.model.Currency;
 import com.example.bookshop.model.Order;
+import com.example.bookshop.model.OrderStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -39,6 +40,7 @@ public class OrderDaoImpl implements OrderDao {
         order.setOrderCode(rs.getString("order_code"));
         order.setTotalPrice(rs.getBigDecimal("total_price"));
         order.setCurrency(Currency.valueOf(rs.getString("currency")));
+        order.setStatus(OrderStatus.valueOf(rs.getString("status")));
         // Позиции заказа загружаются отдельно через OrderEntryDao
         return order;
     };
@@ -107,8 +109,8 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order save(Order order) {
-        String sql = "INSERT INTO orders (user_id, order_date, order_code, total_price, currency) "
-                + "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO orders (user_id, order_date, order_code, total_price, currency, status) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -119,6 +121,7 @@ public class OrderDaoImpl implements OrderDao {
             ps.setString(3, order.getOrderCode());
             ps.setBigDecimal(4, order.getTotalPrice());
             ps.setString(5, order.getCurrency().name());
+            ps.setString(6, order.getStatus().name());
             return ps;
         }, keyHolder);
 
@@ -131,7 +134,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order update(Order order) {
         String sql = "UPDATE orders SET user_id = ?, order_date = ?, order_code = ?, "
-                + "total_price = ?, currency = ? WHERE id = ?";
+                + "total_price = ?, currency = ?, status = ? WHERE id = ?";
 
         int updatedRows = jdbcTemplate.update(sql,
                 order.getUserId(),
@@ -139,6 +142,7 @@ public class OrderDaoImpl implements OrderDao {
                 order.getOrderCode(),
                 order.getTotalPrice(),
                 order.getCurrency().name(),
+                order.getStatus().name(),
                 order.getId());
 
         if (updatedRows == 0) {
