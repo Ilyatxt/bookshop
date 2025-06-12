@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Фрагмент со списком авторов для автодополнения -->
+<div th:fragment="suggestionList">
+    <ul class="list-group">
+        <li th:each="author : ${authors}" 
+            class="list-group-item list-group-item-action" 
+            th:data-id="${author.id}"
+            th:text="${author.firstName + ' ' + author.lastName}">Имя Автора</li>
+    </ul>
+</div>
+</body>
+</html>

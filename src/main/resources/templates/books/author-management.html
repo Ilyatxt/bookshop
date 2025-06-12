@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление авторами книги | Книжный магазин</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Главная</a></li>
+            <li class="breadcrumb-item"><a href="/books">Книги</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/books/{id}(id=${book.id})}" th:text="${book.title}">Книга</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Управление авторами</li>
+        </ol>
+    </nav>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Управление авторами книги</h2>
+            <h5 th:text="${book.title}">Название книги</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Текущие авторы</h4>
+                    <div class="alert alert-info" th:if="${book.authors == null || book.authors.isEmpty()}">
+                        У этой книги нет авторов. Добавьте авторов из списка справа.
+                    </div>
+                    <div th:unless="${book.authors == null || book.authors.isEmpty()}">
+                        <div class="list-group">
+                            <div class="list-group-item" th:each="author : ${book.authors}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a th:href="@{/authors/{id}(id=${author.id})}" th:text="${author.firstName + ' ' + author.lastName}">Имя Фамилия</a>
+                                    <form th:action="@{/books/{bookId}/authors/{authorId}/remove(bookId=${book.id},authorId=${author.id})}" method="post">
+                                        <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <h4>Добавить авторов</h4>
+                    <div class="alert alert-info" th:if="${availableAuthors == null || availableAuthors.isEmpty()}">
+                        Нет доступных авторов для добавления. <a href="/authors/new" class="alert-link">Создать нового автора</a>.
+                    </div>
+                    <div th:unless="${availableAuthors == null || availableAuthors.isEmpty()}">
+                        <div class="list-group">
+                            <div class="list-group-item" th:each="author : ${availableAuthors}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span th:text="${author.firstName + ' ' + author.lastName}">Имя Фамилия</span>
+                                    <form th:action="@{/books/{bookId}/authors/{authorId}/add(bookId=${book.id},authorId=${author.id})}" method="post">
+                                        <button type="submit" class="btn btn-sm btn-primary">Добавить</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-outline-secondary">Вернуться к книге</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

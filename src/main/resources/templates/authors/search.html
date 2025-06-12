@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск авторов | Книжный магазин</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Поиск авторов</h1>
+
+    <form action="/authors/search" method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="name" class="form-control" placeholder="Введите имя или фамилию автора" th:value="${searchQuery}">
+            <button class="btn btn-primary" type="submit">Поиск</button>
+        </div>
+    </form>
+
+    <div class="alert alert-info" th:if="${authors.isEmpty()}">
+        Авторы не найдены. Попробуйте изменить критерии поиска.
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4" th:unless="${authors.isEmpty()}">
+        <div class="col" th:each="author : ${authors}">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a th:href="@{/authors/{id}(id=${author.id})}" th:text="${author.firstName + ' ' + author.lastName}"></a>
+                    </h5>
+                    <p class="card-text" th:if="${author.country}" th:text="${author.country}"></p>
+                    <p class="card-text" th:if="${author.birthdate}" th:text="${#temporals.format(author.birthdate, 'dd.MM.yyyy')}"></p>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group btn-group-sm">
+                        <a th:href="@{/authors/{id}(id=${author.id})}" class="btn btn-outline-primary">Подробнее</a>
+                        <a th:href="@{/authors/{id}/edit(id=${author.id})}" class="btn btn-outline-secondary">Редактировать</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="/authors" class="btn btn-outline-secondary">Все авторы</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

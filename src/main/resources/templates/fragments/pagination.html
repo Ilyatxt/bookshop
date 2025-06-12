@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Пагинация</title>
+</head>
+<body>
+    <!-- Фрагмент пагинации для повторного использования на разных страницах -->
+    <!-- Использование: th:replace="fragments/pagination :: pagination(${page}, '/books', ${searchParams})" -->
+    <nav th:fragment="pagination(page, baseUrl, searchParams)" 
+         th:if="${page != null && page.totalPages > 1}" 
+         class="pagination-container">
+        <ul class="pagination">
+            <!-- Кнопка "Предыдущая" -->
+            <li th:class="${page.first ? 'page-item disabled' : 'page-item'}">
+                <a class="page-link" 
+                   th:href="${page.first ? '#' : baseUrl + '?' + searchParams + '&page=' + (page.pageNumber - 1) + '&size=' + page.pageSize}">
+                    Предыдущая
+                </a>
+            </li>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Фрагмент пагинации для использования на страницах -->
+    <div th:fragment="pagination(page, url, params)" class="pagination-container">
+        <nav aria-label="Навигация по страницам">
+            <ul class="pagination justify-content-center">
+                <!-- Кнопка "Назад" -->
+                <li class="page-item" th:classappend="${page.first ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{${url}(page=${page.number - 1}, size=${page.size}, ${params != null ? params : ''})}" aria-label="Предыдущая">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <!-- Номера страниц -->
+                <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" 
+                    class="page-item" th:classappend="${i == page.number ? 'active' : ''}">
+                    <a class="page-link" th:href="@{${url}(page=${i}, size=${page.size}, ${params != null ? params : ''})}" th:text="${i + 1}">1</a>
+                </li>
+
+                <!-- Кнопка "Вперед" -->
+                <li class="page-item" th:classappend="${page.last ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{${url}(page=${page.number + 1}, size=${page.size}, ${params != null ? params : ''})}" aria-label="Следующая">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Информация о текущей странице -->
+        <div class="text-center mt-2">
+            <small class="text-muted">
+                Страница <span th:text="${page.number + 1}">1</span> из <span th:text="${page.totalPages != 0 ? page.totalPages : 1}">1</span> 
+                (Всего записей: <span th:text="${page.totalElements}">0</span>)
+            </small>
+        </div>
+    </div>
+</body>
+</html>
+            <!-- Номера страниц -->
+            <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                th:class="${i == page.pageNumber ? 'page-item active' : 'page-item'}">
+                <a class="page-link" 
+                   th:href="${baseUrl + '?' + searchParams + '&page=' + i + '&size=' + page.pageSize}"
+                   th:text="${i + 1}">
+                </a>
+            </li>
+
+            <!-- Кнопка "Следующая" -->
+            <li th:class="${page.last ? 'page-item disabled' : 'page-item'}">
+                <a class="page-link" 
+                   th:href="${page.last ? '#' : baseUrl + '?' + searchParams + '&page=' + (page.pageNumber + 1) + '&size=' + page.pageSize}">
+                    Следующая
+                </a>
+            </li>
+        </ul>
+    </nav>
+</body>
+</html>

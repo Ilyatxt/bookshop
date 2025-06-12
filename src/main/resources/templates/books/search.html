@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск книг</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <h1>Поиск книг</h1>
+
+    <form th:action="@{/books/search}" method="get">
+        <input type="text" name="title" th:value="${searchTerm}" placeholder="Введите название книги" />
+        <button type="submit">Поиск</button>
+    </form>
+
+    <div th:if="${bookPage != null && !bookPage.content.isEmpty()}">
+        <h2>Результаты поиска</h2>
+        <table class="book-table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>ISBN</th>
+                    <th>Язык</th>
+                    <th>Цена</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="book : ${bookPage.content}">
+                    <td th:text="${book.title}">Название книги</td>
+                    <td th:text="${book.isbn}">ISBN</td>
+                    <td th:text="${book.language}">Язык</td>
+                    <td th:text="${book.price + ' ' + book.currency}">Цена</td>
+                    <td>
+                        <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-info">Просмотр</a>
+                        <a th:href="@{/books/{id}/edit(id=${book.id})}" class="btn btn-warning">Редактировать</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Пагинация -->
+        <div th:with="searchParams='title=' + ${searchTerm != null ? searchTerm : ''}">
+            <div th:replace="fragments/pagination :: pagination(${bookPage}, '/books/search', ${searchParams})"></div>
+        </div>
+    </div>
+
+    <div th:if="${searchTerm != null && (bookPage == null || bookPage.content.isEmpty())}">
+        <p>По вашему запросу ничего не найдено.</p>
+    </div>
+
+    <a th:href="@{/books}" class="btn btn-secondary">Вернуться к списку книг</a>
+</body>
+</html>

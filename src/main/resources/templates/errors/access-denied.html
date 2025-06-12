@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доступ запрещен - Книжный магазин</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <h1>Доступ запрещен</h1>
+        <p>Извините, у вас нет прав для доступа к этой странице.</p>
+        <div class="links">
+            <a th:href="@{/static}">Вернуться на главную</a>
+        </div>
+    </div>
+</body>
+</html>
