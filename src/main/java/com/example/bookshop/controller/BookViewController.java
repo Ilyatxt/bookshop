@@ -152,4 +152,14 @@ public class BookViewController {
         return "books/form";
     }
 
+    /**
+     * Страница популярных книг
+     */
+    @GetMapping("/top-selling")
+    public String getTopSellingBooks(@RequestParam(defaultValue = "10") int limit, Model model) {
+        List<Book> books = bookService.getTopSellingBooks(limit);
+        model.addAttribute("books", books);
+        return "books/top-selling";
+    }
+
 }
