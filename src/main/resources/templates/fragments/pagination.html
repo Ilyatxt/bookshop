@@ -13,7 +13,7 @@
         <ul class="pagination">
             <!-- Кнопка "Предыдущая" -->
             <li th:class="${page.first ? 'page-item disabled' : 'page-item'}">
-                <a class="page-link" 
+                <a class="page-link"
                    th:href="${page.first ? '#' : baseUrl + '?' + searchParams + '&page=' + (page.pageNumber - 1) + '&size=' + page.pageSize}">
                     Предыдущая
                 </a>
@@ -33,7 +33,7 @@
                 </li>
 
                 <!-- Номера страниц -->
-                <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" 
+                <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
                     class="page-item" th:classappend="${i == page.number ? 'active' : ''}">
                     <a class="page-link" th:href="@{${url}(page=${i}, size=${page.size}, ${params != null ? params : ''})}" th:text="${i + 1}">1</a>
                 </li>
@@ -50,7 +50,7 @@
         <!-- Информация о текущей странице -->
         <div class="text-center mt-2">
             <small class="text-muted">
-                Страница <span th:text="${page.number + 1}">1</span> из <span th:text="${page.totalPages != 0 ? page.totalPages : 1}">1</span> 
+                Страница <span th:text="${page.number + 1}">1</span> из <span th:text="${page.totalPages != 0 ? page.totalPages : 1}">1</span>
                 (Всего записей: <span th:text="${page.totalElements}">0</span>)
             </small>
         </div>
@@ -60,7 +60,7 @@
             <!-- Номера страниц -->
             <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
                 th:class="${i == page.pageNumber ? 'page-item active' : 'page-item'}">
-                <a class="page-link" 
+                <a class="page-link"
                    th:href="${baseUrl + '?' + searchParams + '&page=' + i + '&size=' + page.pageSize}"
                    th:text="${i + 1}">
                 </a>
@@ -68,7 +68,7 @@
 
             <!-- Кнопка "Следующая" -->
             <li th:class="${page.last ? 'page-item disabled' : 'page-item'}">
-                <a class="page-link" 
+                <a class="page-link"
                    th:href="${page.last ? '#' : baseUrl + '?' + searchParams + '&page=' + (page.pageNumber + 1) + '&size=' + page.pageSize}">
                     Следующая
                 </a>

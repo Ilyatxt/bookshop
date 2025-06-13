@@ -38,8 +38,8 @@ public class BookViewController {
 
     @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping
-    public String getAllBooks(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "10") int size,
+    public String getAllBooks(@RequestParam(defaultValue = "0", name = "page") int page,
+                              @RequestParam(defaultValue = "10", name = "size") int size,
                               Model model) {
         PageResponse<Book> bookPage = bookService.getAllBooks(page, size);
         model.addAttribute("bookPage", bookPage);
