@@ -35,3 +35,15 @@
 2025-06-13 20:26:34.148 [main] INFO  c.e.b.service.impl.UserServiceImpl - UserServiceImpl инициализирован
 2025-06-13 20:26:34.152 [main] INFO  c.e.b.service.impl.UserServiceImpl - Попытка смены пароля для пользователя: ID=2
 2025-06-13 20:26:34.153 [main] INFO  c.e.b.service.impl.UserServiceImpl - Пароль успешно изменен для пользователя: ID=2
+2025-06-13 20:58:46.248 [main] INFO  c.e.b.service.impl.UserServiceImpl - UserServiceImpl инициализирован
+2025-06-13 20:58:46.272 [main] INFO  c.e.b.service.impl.UserServiceImpl - Попытка обновления профиля пользователя: ID=1
+2025-06-13 20:58:46.286 [main] INFO  c.e.b.service.impl.UserServiceImpl - Профиль пользователя успешно обновлен: ID=1, email=new@example.com
+2025-06-13 20:58:46.314 [main] INFO  c.e.b.service.impl.UserServiceImpl - UserServiceImpl инициализирован
+2025-06-13 20:58:46.317 [main] INFO  c.e.b.service.impl.UserServiceImpl - Попытка регистрации нового пользователя с email: dup@example.com
+2025-06-13 20:58:46.317 [main] WARN  c.e.b.service.impl.UserServiceImpl - Регистрация не удалась: пользователь с email dup@example.com уже существует
+2025-06-13 20:58:46.321 [main] INFO  c.e.b.service.impl.UserServiceImpl - UserServiceImpl инициализирован
+2025-06-13 20:58:46.325 [main] INFO  c.e.b.service.impl.UserServiceImpl - Попытка регистрации нового пользователя с email: test@example.com
+2025-06-13 20:58:46.329 [main] INFO  c.e.b.service.impl.UserServiceImpl - Пользователь успешно зарегистрирован: ID=0, email=test@example.com
+2025-06-13 20:58:46.340 [main] INFO  c.e.b.service.impl.UserServiceImpl - UserServiceImpl инициализирован
+2025-06-13 20:58:46.342 [main] INFO  c.e.b.service.impl.UserServiceImpl - Попытка смены пароля для пользователя: ID=2
+2025-06-13 20:58:46.343 [main] INFO  c.e.b.service.impl.UserServiceImpl - Пароль успешно изменен для пользователя: ID=2
