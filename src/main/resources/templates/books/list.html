@@ -39,10 +39,9 @@
                             <span class="badge bg-secondary" th:text="'Продано: ' + ${book.soldCount}">Продано: 0</span>
                         </div>
                     </div>
-                    <div class="card-footer d-flex gap-1">
+                    <div class="card-footer">
                         <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-sm btn-outline-primary">Подробнее</a>
                         <a th:href="@{/books/{id}/edit(id=${book.id})}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
-                        <a th:href="@{/orders/create}" class="btn btn-sm btn-success">Новый заказ</a>
                     </div>
                 </div>
             </div>

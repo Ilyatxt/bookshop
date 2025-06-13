@@ -91,8 +91,6 @@ public class BookViewController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("book", new Book());
-        // Добавляем список авторов в модель
-        model.addAttribute("allAuthors", authorService.getAllAuthors());
         return "books/form";
     }
 
@@ -151,8 +149,6 @@ public class BookViewController {
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable(name = "id") long id, Model model) {
         model.addAttribute("book", bookService.getBookById(id));
-        // Добавляем список авторов в модель
-        model.addAttribute("allAuthors", authorService.getAllAuthors());
         return "books/form";
     }
 

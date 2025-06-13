@@ -5,6 +5,12 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import com.example.bookshop.model.OrderStatus;
+
+/**
+ * Модель заказа
+ */
+
 
 public class Order {
 
@@ -22,13 +28,14 @@ public class Order {
 
     private List<OrderEntry> entries;
 
-    //TODO cстатус
+    private OrderStatus status = OrderStatus.NEW;
 
     public Order() {
     }
 
     public Order(long id, long userId, OffsetDateTime orderDate, String orderCode,
-                BigDecimal totalPrice, Currency currency, List<OrderEntry> entries) {
+                 BigDecimal totalPrice, Currency currency, List<OrderEntry> entries,
+                 OrderStatus status) {
         this.id = id;
         this.userId = userId;
         this.orderDate = orderDate;
@@ -36,6 +43,7 @@ public class Order {
         this.totalPrice = totalPrice;
         this.currency = currency;
         this.entries = entries;
+        this.status = status;
     }
 
     public long getId() {
@@ -94,6 +102,14 @@ public class Order {
         this.entries = entries;
     }
 
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -117,6 +133,7 @@ public class Order {
                 ", totalPrice=" + totalPrice +
                 ", currency=" + currency +
                 ", entries=" + entries +
+                ", status=" + status +
                 '}';
     }
 }

@@ -36,9 +36,8 @@
                             <span class="badge bg-primary" th:text="${book.price} + ' ' + ${book.currency}">Цена</span>
                         </div>
                     </div>
-                    <div class="card-footer d-flex gap-1">
+                    <div class="card-footer">
                         <a th:href="@{/books/user/{id}(id=${book.id})}" class="btn btn-sm btn-outline-primary">Подробнее</a>
-                        <a th:href="@{/orders/create}" class="btn btn-sm btn-success">Заказать</a>
                     </div>
                 </div>
             </div>

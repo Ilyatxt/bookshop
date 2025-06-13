@@ -2,6 +2,13 @@ package com.example.bookshop.controller;
 
 import com.example.bookshop.facade.OrderFacade;
 import com.example.bookshop.model.Order;
+import com.example.bookshop.model.OrderEntry;
+import com.example.bookshop.model.OrderStatus;
+import com.example.bookshop.model.Book;
+import com.example.bookshop.model.User;
+import com.example.bookshop.service.BookService;
+import com.example.bookshop.dao.UserDao;
+import java.security.Principal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -25,9 +32,13 @@ public class OrderViewController {
     private static final Logger log = LoggerFactory.getLogger(OrderViewController.class);
     private static final int DEFAULT_PAGE_SIZE = 10;
     private final OrderFacade orderFacade;
+    private final BookService bookService;
+    private final UserDao userDao;
 
-    public OrderViewController(OrderFacade orderFacade) {
+    public OrderViewController(OrderFacade orderFacade, BookService bookService, UserDao userDao) {
         this.orderFacade = orderFacade;
+        this.bookService = bookService;
+        this.userDao = userDao;
     }
 
     /**
@@ -35,8 +46,8 @@ public class OrderViewController {
      */
     @GetMapping
     public String listOrders(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
             Model model) {
 
         List<Order> orders = orderFacade.getOrdersPage(page, size);
@@ -192,8 +203,8 @@ public class OrderViewController {
      */
     @GetMapping("/search")
     public String searchOrdersByPeriod(
-            @RequestParam(required = false) LocalDate startDate,
-            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(name = "startDate", required = false) LocalDate startDate,
+            @RequestParam(name = "endDate", required = false) LocalDate endDate,
             Model model) {
 
         // Если даты не указаны, устанавливаем диапазон за последние 30 дней
@@ -216,5 +227,31 @@ public class OrderViewController {
         model.addAttribute("endDate", endDate);
 
         return "orders/search-results";
+    }
+
+    /**
+     * Страница оформления покупки книги
+     */
+    @GetMapping("/buy/{bookId}")
+    public String showBuyForm(@PathVariable(name = "bookId") long bookId, Model model) {
+        Book book = bookService.getBookById(bookId);
+        model.addAttribute("book", book);
+        model.addAttribute("quantityOptions", List.of(1, 2, 3, 4, 5));
+        model.addAttribute("orderEntry", new OrderEntry());
+        return "orders/buy";
+    }
+
+    /**
+     * Добавление позиции в заказ пользователя
+     */
+    @PostMapping("/buy")
+    public String processBuy(@RequestParam("bookId") long bookId,
+                             @RequestParam("quantity") int quantity,
+                             java.security.Principal principal,
+                             RedirectAttributes redirectAttributes) {
+        User user = userDao.findByUsername(principal.getName()).orElseThrow();
+        orderFacade.addBookToUserOrder(user.getId(), bookId, quantity);
+        redirectAttributes.addFlashAttribute("success", "Книга добавлена в заказ");
+        return "redirect:/books/user/" + bookId;
     }
 }
