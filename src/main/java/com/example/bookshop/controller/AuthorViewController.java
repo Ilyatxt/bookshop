@@ -4,6 +4,7 @@ import com.example.bookshop.dto.PageResponse;
 import com.example.bookshop.model.Author;
 import com.example.bookshop.service.AuthorService;
 import com.example.bookshop.service.BookService;
+import com.example.bookshop.facade.AuthorFacade;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,19 +20,23 @@ public class AuthorViewController {
 
     private final AuthorService authorService;
     private final BookService bookService;
+    private final AuthorFacade authorFacade;
 
-    public AuthorViewController(AuthorService authorService, BookService bookService) {
+    public AuthorViewController(AuthorService authorService, BookService bookService, AuthorFacade authorFacade) {
         this.authorService = authorService;
         this.bookService = bookService;
+        this.authorFacade = authorFacade;
     }
 
     /**
      * Страница всех авторов
      */
     @GetMapping
-    public String getAllAuthors(Model model) {
-        List<Author> authors = authorService.getAllAuthors();
-        model.addAttribute("authors", authors);
+    public String getAllAuthors(@RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size,
+                                Model model) {
+        PageResponse<Author> authorPage = authorFacade.getAllAuthors(page, size);
+        model.addAttribute("authorPage", authorPage);
         return "authors/list";
     }
 
@@ -53,14 +58,16 @@ public class AuthorViewController {
     @GetMapping("/search")
     public String searchAuthors(
             @RequestParam(required = false) String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             Model model) {
-        List<Author> authors;
+        PageResponse<Author> authorPage;
         if (name != null && !name.isEmpty()) {
-            authors = authorService.searchAuthorsByName(name);
+            authorPage = authorFacade.searchAuthorsByName(name, page, size);
         } else {
-            authors = authorService.getAllAuthors();
+            authorPage = authorFacade.getAllAuthors(page, size);
         }
-        model.addAttribute("authors", authors);
+        model.addAttribute("authorPage", authorPage);
         model.addAttribute("searchQuery", name);
         return "authors/search";
     }
