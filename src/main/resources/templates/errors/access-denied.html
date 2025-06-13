@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -8,6 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
+    <div th:replace="fragments/header :: header"></div>
     <div class="error-container">
         <div class="error-icon">⚠️</div>
         <h1>Доступ запрещен</h1>
