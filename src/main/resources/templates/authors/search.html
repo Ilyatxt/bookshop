@@ -18,12 +18,12 @@
         </div>
     </form>
 
-    <div class="alert alert-info" th:if="${authors.isEmpty()}">
+    <div class="alert alert-info" th:if="${authorPage.content.isEmpty()}">
         Авторы не найдены. Попробуйте изменить критерии поиска.
     </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4" th:unless="${authors.isEmpty()}">
-        <div class="col" th:each="author : ${authors}">
+    <div class="row row-cols-1 row-cols-md-3 g-4" th:unless="${authorPage.content.isEmpty()}">
+        <div class="col" th:each="author : ${authorPage.content}">
             <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">
@@ -42,8 +42,9 @@
         </div>
     </div>
 
-    <div class="mt-4">
-        <a href="/authors" class="btn btn-outline-secondary">Все авторы</a>
+    <div class="mt-4" th:with="searchParams='name=' + ${searchQuery != null ? searchQuery : ''}">
+        <div th:replace="fragments/pagination :: pagination(${authorPage}, '/authors/search', ${searchParams})"></div>
+        <a href="/authors" class="btn btn-outline-secondary mt-3">Все авторы</a>
     </div>
 </div>
 
