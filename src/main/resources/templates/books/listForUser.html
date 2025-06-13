@@ -19,12 +19,12 @@
             </form>
         </div>
 
-        <div class="alert alert-info" th:if="${books.isEmpty()}">
+        <div class="alert alert-info" th:if="${bookPage.content.isEmpty()}">
             Книги не найдены.
         </div>
 
-        <div class="row row-cols-1 row-cols-md-3 g-4" th:unless="${books.isEmpty()}">
-            <div class="col" th:each="book : ${books}">
+        <div class="row row-cols-1 row-cols-md-3 g-4" th:unless="${bookPage.content.isEmpty()}">
+            <div class="col" th:each="book : ${bookPage.content}">
                 <div class="card h-100">
                     <img th:if="${book.coverImageUrl}" th:src="${book.coverImageUrl}" class="card-img-top" alt="Обложка книги" style="height: 200px; object-fit: cover;">
                     <div th:unless="${book.coverImageUrl}" class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
@@ -42,6 +42,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="mt-4">
+            <div th:replace="fragments/pagination :: pagination(${bookPage}, '/books/user/books', null)"></div>
         </div>
     </div>
 

@@ -38,17 +38,21 @@ public class BookViewController {
 
     @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping
-    public String getAllBooks(Model model) {
-        List<Book> books = bookService.getAllBooks();
-        model.addAttribute("books", books);
+    public String getAllBooks(@RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "10") int size,
+                              Model model) {
+        PageResponse<Book> bookPage = bookService.getAllBooks(page, size);
+        model.addAttribute("bookPage", bookPage);
         return "books/list";
     }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("user/books")
-    public String getAllBoosForUser(Model model) {
-        List<Book> books = bookService.getAllBooks();
-        model.addAttribute("books", books);
+    public String getAllBoosForUser(@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "10") int size,
+                                    Model model) {
+        PageResponse<Book> bookPage = bookService.getAllBooks(page, size);
+        model.addAttribute("bookPage", bookPage);
         return "books/listForUser";
     }
 
@@ -72,16 +76,17 @@ public class BookViewController {
     @GetMapping("/search")
     public String searchBooks(
             @RequestParam(required = false) String title,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             Model model) {
-        List<Book> books;
+        PageResponse<Book> bookPage;
         if (title != null && !title.isEmpty()) {
-            books = bookService.searchBooksByTitle(title);
+            bookPage = bookService.searchBooksByTitle(title, page, size);
             model.addAttribute("searchTerm", title);
         } else {
-            // Если запрос пустой, показываем все книги
-            books = bookService.getAllBooks();
+            bookPage = bookService.getAllBooks(page, size);
         }
-        model.addAttribute("books", books);
+        model.addAttribute("bookPage", bookPage);
         return "books/search";
     }
 
