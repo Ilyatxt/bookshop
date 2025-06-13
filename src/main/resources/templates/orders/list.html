@@ -37,24 +37,9 @@
         </tr>
         </tbody>
     </table>
-    <div class="mt-4" th:if="${totalPages > 1}">
-        <nav aria-label="Навигация по страницам">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{|/orders?page=${currentPage - 1}&size=${pageSize}|}" aria-label="Предыдущая">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
-                    <a class="page-link" th:href="@{|/orders?page=${i}&size=${pageSize}|}" th:text="${i + 1}"></a>
-                </li>
-                <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
-                    <a class="page-link" th:href="@{|/orders?page=${currentPage + 1}&size=${pageSize}|}" aria-label="Следующая">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+    <div class="mt-4"
+         th:with="page=${{'number': currentPage, 'size': pageSize, 'totalPages': totalPages}}">
+        <div th:replace="fragments/pagination :: pagination(${page}, '/orders', null)"></div>
     </div>
 </div>
 </body>
