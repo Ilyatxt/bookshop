@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Поиск книг</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+    <div th:replace="fragments/header :: header"></div>
     <h1>Поиск книг</h1>
 
     <form th:action="@{/books/search}" method="get">
