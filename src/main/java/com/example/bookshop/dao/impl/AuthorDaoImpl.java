@@ -51,12 +51,16 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public List<Author> findAll(int pageNumber, int pageSize) {
-        return List.of();
+        int offset = pageNumber * pageSize;
+        String sql = "SELECT * FROM authors ORDER BY last_name, first_name LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, authorRowMapper, pageSize, offset);
     }
 
     @Override
     public long countAll() {
-        return 0;
+        String sql = "SELECT COUNT(*) FROM authors";
+        Long count = jdbcTemplate.queryForObject(sql, Long.class);
+        return count != null ? count : 0L;
     }
 
     @Override
@@ -86,7 +90,10 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public long countByName(String name) {
-        return 0;
+        String searchPattern = "%" + name.toLowerCase() + "%";
+        String sql = "SELECT COUNT(*) FROM authors WHERE LOWER(first_name) LIKE ? OR LOWER(last_name) LIKE ?";
+        Long count = jdbcTemplate.queryForObject(sql, Long.class, searchPattern, searchPattern);
+        return count != null ? count : 0L;
     }
 
     @Override

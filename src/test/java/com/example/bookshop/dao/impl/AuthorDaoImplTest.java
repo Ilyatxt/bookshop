@@ -40,4 +40,26 @@ class AuthorDaoImplTest {
         when(jdbcTemplate.update(anyString(), eq(5L))).thenReturn(0);
         assertFalse(dao.deleteById(5L));
     }
+
+    @Test
+    void findAll_withPagination() {
+        List<Author> authors = List.of(new Author());
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class), eq(10), eq(20)))
+                .thenReturn(authors);
+        List<Author> result = dao.findAll(2, 10);
+        assertSame(authors, result);
+    }
+
+    @Test
+    void countAll_returnsValue() {
+        when(jdbcTemplate.queryForObject(anyString(), eq(Long.class))).thenReturn(7L);
+        assertEquals(7L, dao.countAll());
+    }
+
+    @Test
+    void countByName_returnsValue() {
+        when(jdbcTemplate.queryForObject(anyString(), eq(Long.class), eq("%john%"), eq("%john%")))
+                .thenReturn(3L);
+        assertEquals(3L, dao.countByName("john"));
+    }
 }
