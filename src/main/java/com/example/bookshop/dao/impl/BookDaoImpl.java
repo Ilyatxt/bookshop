@@ -345,10 +345,21 @@ public class BookDaoImpl implements BookDao {
      */
     private Long getGenreIdByName(String genreName) {
         try {
-            String sql = "SELECT id FROM genres WHERE name = ?";
+            String sql = "SELECT id FROM genres WHERE name = ?"; 
             return jdbcTemplate.queryForObject(sql, Long.class, genreName);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    @Override
+    public List<Map<String, Object>> searchGenres(String query) {
+        String sql = "SELECT id, name FROM genres WHERE LOWER(name) LIKE LOWER(?) ORDER BY name LIMIT 10";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", rs.getLong("id"));
+            map.put("name", rs.getString("name"));
+            return map;
+        }, "%" + query + "%");
     }
 }
