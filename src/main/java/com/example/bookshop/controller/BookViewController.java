@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * контроллер для отображения страниц с книгами
@@ -104,13 +106,41 @@ public class BookViewController {
      */
     @PostMapping
     public String createBook(@ModelAttribute Book book,
-                             @RequestParam(value = "authorId", required = false) Long authorId,
+                             @RequestParam(value = "authorIds", required = false) String authorIds,
                              @RequestParam(value = "genreIds", required = false) String genreIds) {
 
-        Book savedBook = bookFacade.createBook(book);
-        bookFacade.addAuthorToBook(savedBook.getId(), authorId);
+        // --- Обработка авторов книги ---
+        List<Long> parsedAuthorIds = new ArrayList<>();
+        if (authorIds != null && !authorIds.isEmpty()) {
+            String[] authorIdArray = authorIds.split(",");
+            for (String authorId : authorIdArray) {
+                if (!authorId.isEmpty()) {
+                    try {
+                        parsedAuthorIds.add(Long.parseLong(authorId));
+                    } catch (NumberFormatException ignored) {
+                    }
+                }
+            }
+        }
 
-        // Обработка жанров книги
+        // Передаем список авторов для проверки уникальности
+        if (!parsedAuthorIds.isEmpty()) {
+            List<Author> authors = parsedAuthorIds.stream().map(id -> {
+                Author a = new Author();
+                a.setId(id);
+                return a;
+            }).collect(Collectors.toList());
+            book.setAuthors(authors);
+        }
+
+        Book savedBook = bookFacade.createBook(book);
+
+        // Создаем связи книга-автор
+        for (Long id : parsedAuthorIds) {
+            bookFacade.addAuthorToBook(savedBook.getId(), id);
+        }
+
+        // --- Обработка жанров книги ---
         if (genreIds != null && !genreIds.isEmpty()) {
             String[] genreIdArray = genreIds.split(",");
             for (String genreId : genreIdArray) {
