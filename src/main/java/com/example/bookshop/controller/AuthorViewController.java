@@ -32,8 +32,8 @@ public class AuthorViewController {
      * Страница всех авторов
      */
     @GetMapping
-    public String getAllAuthors(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "10") int size,
+    public String getAllAuthors(@RequestParam(defaultValue = "0", name = "page") int page,
+                                @RequestParam(defaultValue = "10", name = "size") int size,
                                 Model model) {
         PageResponse<Author> authorPage = authorFacade.getAllAuthors(page, size);
         model.addAttribute("authorPage", authorPage);
@@ -58,8 +58,8 @@ public class AuthorViewController {
     @GetMapping("/search")
     public String searchAuthors(
             @RequestParam(required = false) String name,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0", name = "page") int page,
+            @RequestParam(defaultValue = "10", name = "size") int size,
             Model model) {
         PageResponse<Author> authorPage;
         if (name != null && !name.isEmpty()) {

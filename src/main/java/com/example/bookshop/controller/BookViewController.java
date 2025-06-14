@@ -77,9 +77,9 @@ public class BookViewController {
      */
     @GetMapping("/search")
     public String searchBooks(
-            @RequestParam(required = false) String title,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false, name = "title") String title,
+            @RequestParam(defaultValue = "0", name = "page") int page,
+            @RequestParam(defaultValue = "10", name = "size") int size,
             Model model) {
         PageResponse<Book> bookPage;
         if (title != null && !title.isEmpty()) {
@@ -180,7 +180,8 @@ public class BookViewController {
      * Добавление автора к книге
      */
     @PostMapping("/{bookId}/authors/{authorId}/add")
-    public String addAuthorToBook(@PathVariable(name = "bookId") long bookId, @PathVariable(name = "authorId") long authorId) {
+    public String addAuthorToBook(@PathVariable(name = "bookId") long bookId,
+                                  @PathVariable(name = "authorId") long authorId) {
         bookService.addAuthorToBook(bookId, authorId);
         return "redirect:/books/" + bookId + "/authors";
     }
@@ -189,7 +190,8 @@ public class BookViewController {
      * Удаление автора у книги
      */
     @PostMapping("/{bookId}/authors/{authorId}/remove")
-    public String removeAuthorFromBook(@PathVariable(name = "bookId") long bookId, @PathVariable(name = "authorId") long authorId) {
+    public String removeAuthorFromBook(@PathVariable(name = "bookId") long bookId,
+                                       @PathVariable(name = "authorId") long authorId) {
         bookService.removeAuthorFromBook(bookId, authorId);
         return "redirect:/books/" + bookId + "/authors";
     }
@@ -207,7 +209,7 @@ public class BookViewController {
      * Страница популярных книг
      */
     @GetMapping("/top-selling")
-    public String getTopSellingBooks(@RequestParam(defaultValue = "10") int limit, Model model) {
+    public String getTopSellingBooks(@RequestParam(defaultValue = "10", name = "limit") int limit, Model model) {
         List<Book> books = bookService.getTopSellingBooks(limit);
         model.addAttribute("books", books);
         return "books/top-selling";
