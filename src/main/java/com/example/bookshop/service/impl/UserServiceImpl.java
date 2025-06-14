@@ -111,4 +111,32 @@ public class UserServiceImpl implements UserService {
         userDao.save(user);
         log.info("Пароль успешно изменен для пользователя: ID={}", user.getId());
     }
+
+    @Override
+    public Optional<User> findById(long id) {
+        return userDao.findById(id);
+    }
+
+    @Override
+    public java.util.List<User> getUsersPage(int page, int size) {
+        java.util.List<User> users = userDao.findAll();
+        int from = Math.min(page * size, users.size());
+        int to = Math.min(from + size, users.size());
+        return users.subList(from, to);
+    }
+
+    @Override
+    public long countUsers() {
+        return userDao.findAll().size();
+    }
+
+    @Override
+    public void deleteUser(long id) {
+        userDao.delete(id);
+    }
+
+    @Override
+    public void updateRole(long userId, com.example.bookshop.model.Role role) {
+        userDao.updateUserRole(userId, role);
+    }
 }
