@@ -32,8 +32,8 @@ public class AdminUserController {
      * Список пользователей
      */
     @GetMapping
-    public String listUsers(@RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "10") int size,
+    public String listUsers(@RequestParam(defaultValue = "0", name = "page") int page,
+                            @RequestParam(defaultValue = "10", name = "size") int size,
                             Model model) {
         List<User> users = userService.getUsersPage(page, size);
         long total = userService.countUsers();
@@ -49,7 +49,7 @@ public class AdminUserController {
      * Детали пользователя
      */
     @GetMapping("/{id}")
-    public String userDetails(@PathVariable long id, Model model, RedirectAttributes redirect) {
+    public String userDetails(@PathVariable(name = "id") long id, Model model, RedirectAttributes redirect) {
         return userService.findById(id)
                 .map(user -> {
                     model.addAttribute("user", user);
@@ -86,7 +86,7 @@ public class AdminUserController {
      * Форма редактирования пользователя
      */
     @GetMapping("/{id}/edit")
-    public String showEditForm(@PathVariable long id, Model model, RedirectAttributes redirect) {
+    public String showEditForm(@PathVariable(name = "id") long id, Model model, RedirectAttributes redirect) {
         return userService.findById(id)
                 .map(u -> {
                     model.addAttribute("user", u);
@@ -103,7 +103,8 @@ public class AdminUserController {
      * Обновление пользователя
      */
     @PostMapping("/{id}")
-    public String updateUser(@PathVariable long id, @ModelAttribute User user, @RequestParam Role role) {
+    public String updateUser(@PathVariable(name = "id") long id, @ModelAttribute User user,
+                             @RequestParam(name = "role") Role role) {
         user.setId(id);
         user.setRole(role);
         userService.updateProfile(user);
@@ -114,7 +115,7 @@ public class AdminUserController {
      * Удаление пользователя
      */
     @PostMapping("/{id}/delete")
-    public String deleteUser(@PathVariable long id) {
+    public String deleteUser(@PathVariable(name = "id") long id) {
         userService.deleteUser(id);
         return "redirect:/admin/users";
     }
@@ -123,7 +124,7 @@ public class AdminUserController {
      * Форма смены пароля
      */
     @GetMapping("/{id}/password")
-    public String showPasswordForm(@PathVariable long id, Model model, RedirectAttributes redirect) {
+    public String showPasswordForm(@PathVariable(name = "id") long id, Model model, RedirectAttributes redirect) {
         return userService.findById(id)
                 .map(u -> {
                     model.addAttribute("user", u);
@@ -139,7 +140,7 @@ public class AdminUserController {
      * Изменение пароля
      */
     @PostMapping("/{id}/password")
-    public String changePassword(@PathVariable long id, @RequestParam String newPassword) {
+    public String changePassword(@PathVariable(name = "id") long id, @RequestParam(name = "newPassword") String newPassword) {
         userService.findById(id).ifPresent(u -> userService.changePassword(u, newPassword));
         return "redirect:/admin/users/" + id;
     }
