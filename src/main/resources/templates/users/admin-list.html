@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Список пользователей</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container mt-5">
+    <h1>Список пользователей</h1>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Роль</th>
+            <th>Дата регистрации</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.role}"></td>
+            <td th:text="${#temporals.format(user.createdAt,'dd-MM-yyyy HH:mm')}"></td>
+            <td>
+                <a th:href="@{'/admin/users/' + ${user.id}}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="mt-4" th:with="page=${{'number': currentPage, 'size': pageSize, 'totalPages': totalPages}}">
+        <div th:replace="fragments/pagination :: pagination(${page}, '/admin/users', null)"></div>
+    </div>
+</div>
+</body>
+</html>
