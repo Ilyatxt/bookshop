@@ -42,7 +42,7 @@ public class BookViewController {
                               @RequestParam(defaultValue = "10", name = "size") int size,
                               Model model) {
         PageResponse<Book> bookPage = bookService.getAllBooks(page, size);
-        model.addAttribute("bookPage", bookPage);
+        model.addAttribute("page", bookPage);
         return "books/list";
     }
 
