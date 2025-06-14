@@ -3,6 +3,7 @@ package com.example.bookshop.dao;
 import com.example.bookshop.model.Book;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -163,4 +164,11 @@ public interface BookDao {
     boolean existsByTitleAndAuthorId(String title, long authorId);
 
     boolean existsByTitleAndAllAuthors(String title, List<Long> authorIds);
+
+    /**
+     * Поиск жанров по части названия
+     * @param query часть названия жанра
+     * @return список жанров (id и name)
+     */
+    List<Map<String, Object>> searchGenres(String query);
 }
