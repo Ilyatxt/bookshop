@@ -5,6 +5,7 @@
     <title th:text="${book.id == 0 ? 'Добавление новой книги' : 'Редактирование книги'}">Форма книги</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/dropdown.css}">
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
@@ -47,13 +48,20 @@
                     </select>
                 </div>
 
-                                <!-- Автодополнение автора -->
-                                <div class="mb-3 position-relative">
-                                    <label for="authorName" class="form-label">Автор</label>
-                                    <input type="text" class="form-control" id="authorName" autocomplete="off" placeholder="Начните вводить имя">
-                                    <input type="hidden" id="authorId" name="authorId">
-                                    <div id="author-suggestions" class="list-group position-absolute w-100"></div>
-                                </div>
+                <!-- Выбор авторов книги -->
+                <div class="mb-3">
+                    <label class="form-label">Авторы книги</label>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" id="authorName" placeholder="Начните вводить имя автора..." autocomplete="off">
+                        <button class="btn btn-outline-secondary" type="button" id="addAuthorBtn">Добавить</button>
+                    </div>
+                    <div id="author-suggestions" class="list-group position-absolute w-50 z-index-dropdown"></div>
+
+                    <!-- Контейнер для выбранных авторов -->
+                    <div id="selectedAuthors" class="d-flex flex-wrap gap-2 mt-2"></div>
+
+                    <!-- Скрытые поля для хранения ID выбранных авторов -->
+                    <input type="hidden" id="authorIds" name="authorIds">
             </div>
 
             <div class="row">
@@ -68,6 +76,22 @@
                 </div>
             </div>
 
+            <!-- Выбор жанров книги -->
+            <div class="mb-3">
+                <label class="form-label">Жанры книги</label>
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="genreSearch" placeholder="Начните вводить название жанра..." autocomplete="off">
+                    <button class="btn btn-outline-secondary" type="button" id="addGenreBtn">Добавить</button>
+                </div>
+                <div id="genreSuggestions" class="list-group position-absolute w-50 z-index-dropdown"></div>
+
+                <!-- Контейнер для выбранных жанров -->
+                <div id="selectedGenres" class="d-flex flex-wrap gap-2 mt-2"></div>
+
+                <!-- Скрытые поля для хранения ID выбранных жанров -->
+                <input type="hidden" id="genreIds" name="genreIds">
+            </div>
+
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="price" class="form-label">Цена</label>
@@ -80,7 +104,7 @@
                         <option value="USD">USD</option>
                         <option value="EUR">EUR</option>
                         <option value="RUB">RUB</option>
-                        <option value="GBP">GBP</option>
+                        <option value="GBP">KZT</option>
                     </select>
                 </div>
             </div>
@@ -95,6 +119,7 @@
     </div>
 
     <script th:src="@{/js/author-autocomplete.js}"></script>
+    <script th:src="@{/js/genre-autocomplete.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

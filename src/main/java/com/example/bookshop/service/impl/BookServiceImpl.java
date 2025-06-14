@@ -33,6 +33,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public boolean addGenreToBook(long bookId, long genreId) {
+        return bookDao.addGenreToBook(bookId, genreId);
+    }
+
+    @Override
+    public boolean removeGenreFromBook(long bookId, long genreId) {
+        return bookDao.removeGenreFromBook(bookId, genreId);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Book> getAllBooks() {
         log.debug("Получение списка всех книг");

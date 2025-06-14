@@ -128,6 +128,24 @@ public interface BookDao {
     boolean removeAuthorFromBook(long bookId, long authorId);
 
     /**
+     * Связать книгу с жанром
+     *
+     * @param bookId идентификатор книги
+     * @param genreId идентификатор жанра
+     * @return true если связь успешно установлена
+     */
+    boolean addGenreToBook(long bookId, long genreId);
+
+    /**
+     * Удалить связь книги с жанром
+     *
+     * @param bookId идентификатор книги
+     * @param genreId идентификатор жанра
+     * @return true если связь успешно удалена
+     */
+    boolean removeGenreFromBook(long bookId, long genreId);
+
+    /**
      * Найти все книги автора
      *
      * @param authorId идентификатор автора

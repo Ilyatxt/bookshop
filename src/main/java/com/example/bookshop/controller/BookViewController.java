@@ -104,10 +104,26 @@ public class BookViewController {
      */
     @PostMapping
     public String createBook(@ModelAttribute Book book,
-                             @RequestParam(value = "authorId", required = false) Long authorId) {
+                             @RequestParam(value = "authorId", required = false) Long authorId,
+                             @RequestParam(value = "genreIds", required = false) String genreIds) {
 
         Book savedBook = bookFacade.createBook(book);
         bookFacade.addAuthorToBook(savedBook.getId(), authorId);
+
+        // Обработка жанров книги
+        if (genreIds != null && !genreIds.isEmpty()) {
+            String[] genreIdArray = genreIds.split(",");
+            for (String genreId : genreIdArray) {
+                if (!genreId.isEmpty()) {
+                    try {
+                        long id = Long.parseLong(genreId);
+                        bookFacade.addGenreToBook(savedBook.getId(), id);
+                    } catch (NumberFormatException e) {
+                        // Игнорируем некорректные идентификаторы
+                    }
+                }
+            }
+        }
 
         return "redirect:/books/" + savedBook.getId();
     }

@@ -217,6 +217,26 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    public boolean addGenreToBook(long bookId, long genreId) {
+        // Проверяем, существует ли уже такая связь
+        String checkSql = "SELECT COUNT(*) FROM book_genres WHERE book_id = ? AND genre_id = ?";
+        int count = jdbcTemplate.queryForObject(checkSql, Integer.class, bookId, genreId);
+
+        if (count > 0) {
+            return true; // Связь уже существует
+        }
+
+        String sql = "INSERT INTO book_genres (book_id, genre_id) VALUES (?, ?)";
+        return jdbcTemplate.update(sql, bookId, genreId) > 0;
+    }
+
+    @Override
+    public boolean removeGenreFromBook(long bookId, long genreId) {
+        String sql = "DELETE FROM book_genres WHERE book_id = ? AND genre_id = ?";
+        return jdbcTemplate.update(sql, bookId, genreId) > 0;
+    }
+
+    @Override
     public List<Book> findByAuthorId(long authorId) {
         String sql = "SELECT b.* FROM books b " +
                 "JOIN book_authors ba ON b.id = ba.book_id " +

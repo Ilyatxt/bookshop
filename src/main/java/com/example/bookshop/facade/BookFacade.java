@@ -43,8 +43,11 @@ public class BookFacade {
     public void addAuthorToBook(long bookId, long authorId) {
         bookService.addAuthorToBook(bookId, authorId);
     }
-
+    public void addGenreToBook(long bookId, long genreId) {
+        bookService.addGenreToBook(bookId, genreId);
+    }
 
 
 
 }
+

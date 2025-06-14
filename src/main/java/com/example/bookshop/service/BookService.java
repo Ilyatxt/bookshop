@@ -1,5 +1,6 @@
 package com.example.bookshop.service;
 
+
 import com.example.bookshop.dto.PageResponse;
 import com.example.bookshop.model.Book;
 import org.springframework.stereotype.Service;
@@ -121,5 +122,9 @@ public interface BookService {
      * @return список книг автора
      */
     List<Book> getBooksByAuthorId(long authorId);
+
+    boolean addGenreToBook(long bookId, long genreId);
+
+    boolean removeGenreFromBook(long bookId, long genreId);
 
 }

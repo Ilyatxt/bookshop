@@ -24,6 +24,21 @@
             </div>
         </div>
     </div>
+
+    <!-- Блок с жанрами книги -->
+    <div class="card mb-4" th:if="${book.genres != null and !book.genres.isEmpty()}">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">Жанры книги</h4>
+        </div>
+        <div class="card-body">
+            <div class="d-flex flex-wrap gap-2">
+                <span th:each="genre : ${book.genres}" 
+                     class="badge bg-success p-2 fs-6">
+                    <span th:text="${genre}">Жанр</span>
+                </span>
+            </div>
+        </div>
+    </div>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a th:href="@{/books}">Книги</a></li>
