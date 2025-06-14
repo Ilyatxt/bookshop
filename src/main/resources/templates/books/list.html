@@ -27,8 +27,8 @@
         <div class="row row-cols-1 row-cols-md-3 g-4" th:unless="${page.content.isEmpty()}">
             <div class="col" th:each="book : ${page.content}">
                 <div class="card h-100">
-                    <img th:if="${book.coverImageUrl}" th:src="${book.coverImageUrl}" class="card-img-top" alt="Обложка книги" style="height: 200px; object-fit: cover;">
-                    <div th:unless="${book.coverImageUrl}" class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <img th:if="${book.coverImageUrl}" th:src="${book.coverImageUrl}" class="card-img-top book-card-image" alt="Обложка книги">
+                    <div th:unless="${book.coverImageUrl}" class="card-img-top book-placeholder">
                         <span class="text-muted">Нет обложки</span>
                     </div>
                     <div class="card-body">
