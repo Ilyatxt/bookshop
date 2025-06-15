@@ -116,6 +116,24 @@ public class BookViewController {
         return "books/search";
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/user/search")
+    public String searchBooksForUser(
+            @RequestParam(required = false, name = "title") String title,
+            @RequestParam(defaultValue = "0", name = "page") int page,
+            @RequestParam(defaultValue = "10", name = "size") int size,
+            Model model) {
+        PageResponse<Book> bookPage;
+        if (title != null && !title.isEmpty()) {
+            bookPage = bookService.searchBooksByTitle(title, page, size);
+            model.addAttribute("searchTerm", title);
+        } else {
+            bookPage = bookService.getAllBooks(page, size);
+        }
+        model.addAttribute("bookPage", bookPage);
+        return "books/searchForUser";
+    }
+
     /**
      * Отображение формы для создания новой книги
      */

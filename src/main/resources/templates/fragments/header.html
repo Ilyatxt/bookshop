@@ -22,7 +22,11 @@
                 </li>
             </ul>
 
-            <form class="d-flex me-3" th:action="@{/books/search}" method="get">
+            <form class="d-flex me-3" th:action="@{/books/search}" method="get" sec:authorize="hasRole('MODERATOR') or hasRole('ADMIN')">
+                <input class="form-control me-2" type="search" placeholder="Поиск книг" aria-label="Search" name="title">
+                <button class="btn btn-outline-success" type="submit">Поиск</button>
+            </form>
+            <form class="d-flex me-3" th:action="@{/books/user/search}" method="get" sec:authorize="hasRole('USER')">
                 <input class="form-control me-2" type="search" placeholder="Поиск книг" aria-label="Search" name="title">
                 <button class="btn btn-outline-success" type="submit">Поиск</button>
             </form>

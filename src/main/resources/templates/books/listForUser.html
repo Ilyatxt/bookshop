@@ -19,7 +19,7 @@
                 <a th:href="@{/books/top-selling}" class="btn btn-outline-success me-2">Популярные книги</a>
                 <a th:href="@{/orders/my}" class="btn btn-outline-primary">Заказ</a>
             </div>
-            <form th:action="@{/books/search}" method="get" class="d-flex">
+            <form th:action="@{/books/user/search}" method="get" class="d-flex">
                 <input type="text" name="title" class="form-control me-2" placeholder="Поиск по названию">
                 <button type="submit" class="btn btn-outline-primary">Поиск</button>
             </form>
