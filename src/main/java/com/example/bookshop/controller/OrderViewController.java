@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -132,11 +130,6 @@ public class OrderViewController {
     @PostMapping("/create")
     public String createOrder(@ModelAttribute Order order, RedirectAttributes redirectAttributes) {
         try {
-            // Установка текущей даты заказа, если она не указана
-            if (order.getOrderDate() == null) {
-                order.setOrderDate(OffsetDateTime.now());
-            }
-
             Order createdOrder = orderFacade.createOrderWithEntries(order);
             redirectAttributes.addFlashAttribute("success", "Заказ успешно создан");
             return "redirect:/orders/" + createdOrder.getId();
@@ -169,16 +162,13 @@ public class OrderViewController {
     @PostMapping("/{orderId}/edit")
     public String updateOrder(@PathVariable(name = "orderId") long orderId, @ModelAttribute Order order, RedirectAttributes redirectAttributes) {
         try {
-            // Проверяем существование заказа
-            if (!orderFacade.getOrderWithEntries(orderId).isPresent()) {
+            var updated = orderFacade.updateOrderWithEntriesIfExists(orderId, order);
+            if (updated.isEmpty()) {
                 redirectAttributes.addFlashAttribute("error", "Заказ с ID " + orderId + " не найден");
                 return "redirect:/orders";
             }
 
-            // Устанавливаем ID заказа
-            order.setId(orderId);
-
-            Order updatedOrder = orderFacade.updateOrderWithEntries(order);
+            Order updatedOrder = updated.get();
             redirectAttributes.addFlashAttribute("success", "Заказ успешно обновлен");
             return "redirect:/orders/" + updatedOrder.getId();
         } catch (Exception e) {
@@ -218,26 +208,10 @@ public class OrderViewController {
             @RequestParam(name = "startDate", required = false) LocalDate startDate,
             @RequestParam(name = "endDate", required = false) LocalDate endDate,
             Model model) {
-
-        // Если даты не указаны, устанавливаем диапазон за последние 30 дней
-        if (startDate == null) {
-            startDate = LocalDate.now().minusDays(30);
-        }
-
-        if (endDate == null) {
-            endDate = LocalDate.now();
-        }
-
-        // Преобразуем LocalDate в OffsetDateTime
-        OffsetDateTime startDateTime = startDate.atStartOfDay().atOffset(ZoneOffset.UTC);
-        OffsetDateTime endDateTime = endDate.plusDays(1).atStartOfDay().atOffset(ZoneOffset.UTC);
-
-        List<Order> orders = orderFacade.getOrdersByPeriod(startDateTime, endDateTime);
-
+        List<Order> orders = orderFacade.searchOrdersByPeriod(startDate, endDate);
         model.addAttribute("orders", orders);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
-
         return "orders/search-results";
     }
 

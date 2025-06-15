@@ -2,7 +2,6 @@ package com.example.bookshop.controller;
 
 import com.example.bookshop.dto.PageResponse;
 import com.example.bookshop.facade.BookFacade;
-import com.example.bookshop.model.Author;
 import com.example.bookshop.model.Book;
 import com.example.bookshop.service.AuthorService;
 import com.example.bookshop.service.BookService;
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * контроллер для отображения страниц с книгами
@@ -150,53 +147,7 @@ public class BookViewController {
     public String createBook(@ModelAttribute Book book,
                              @RequestParam(value = "authorIds", required = false) String authorIds,
                              @RequestParam(value = "genreIds", required = false) String genreIds) {
-
-        // --- Обработка авторов книги ---
-        List<Long> parsedAuthorIds = new ArrayList<>();
-        if (authorIds != null && !authorIds.isEmpty()) {
-            String[] authorIdArray = authorIds.split(",");
-            for (String authorId : authorIdArray) {
-                if (!authorId.isEmpty()) {
-                    try {
-                        parsedAuthorIds.add(Long.parseLong(authorId));
-                    } catch (NumberFormatException ignored) {
-                    }
-                }
-            }
-        }
-
-        // Передаем список авторов для проверки уникальности
-        if (!parsedAuthorIds.isEmpty()) {
-            List<Author> authors = parsedAuthorIds.stream().map(id -> {
-                Author a = new Author();
-                a.setId(id);
-                return a;
-            }).collect(Collectors.toList());
-            book.setAuthors(authors);
-        }
-
-        Book savedBook = bookFacade.createBook(book);
-
-        // Создаем связи книга-автор
-        for (Long id : parsedAuthorIds) {
-            bookFacade.addAuthorToBook(savedBook.getId(), id);
-        }
-
-        // --- Обработка жанров книги ---
-        if (genreIds != null && !genreIds.isEmpty()) {
-            String[] genreIdArray = genreIds.split(",");
-            for (String genreId : genreIdArray) {
-                if (!genreId.isEmpty()) {
-                    try {
-                        long id = Long.parseLong(genreId);
-                        bookFacade.addGenreToBook(savedBook.getId(), id);
-                    } catch (NumberFormatException e) {
-                        // Игнорируем некорректные идентификаторы
-                    }
-                }
-            }
-        }
-
+        Book savedBook = bookFacade.createBookWithRelations(book, authorIds, genreIds);
         return "redirect:/books/" + savedBook.getId();
     }
 
@@ -224,7 +175,7 @@ public class BookViewController {
     @PostMapping("/{bookId}/authors/{authorId}/add")
     public String addAuthorToBook(@PathVariable(name = "bookId") long bookId,
                                   @PathVariable(name = "authorId") long authorId) {
-        bookService.addAuthorToBook(bookId, authorId);
+        bookFacade.addAuthorToBook(bookId, authorId);
         return "redirect:/books/" + bookId + "/authors";
     }
 
@@ -234,7 +185,7 @@ public class BookViewController {
     @PostMapping("/{bookId}/authors/{authorId}/remove")
     public String removeAuthorFromBook(@PathVariable(name = "bookId") long bookId,
                                        @PathVariable(name = "authorId") long authorId) {
-        bookService.removeAuthorFromBook(bookId, authorId);
+        bookFacade.removeAuthorFromBook(bookId, authorId);
         return "redirect:/books/" + bookId + "/authors";
     }
 
