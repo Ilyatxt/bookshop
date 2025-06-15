@@ -11,9 +11,6 @@
     <div th:replace="fragments/header :: header"></div>
 <div class="container mt-5">
     <h1>Авторы</h1>
-    <div class="mb-4">
-        <a th:href="@{/authors/new}" class="btn btn-primary">Добавить автора</a>
-    </div>
 
     <div class="alert alert-info" th:if="${authorPage.content.isEmpty()}">
         Авторы не найдены.
@@ -24,15 +21,14 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <a th:href="@{/authors/{id}(id=${author.id})}" th:text="${author.firstName + ' ' + author.lastName}"></a>
+                        <a th:href="@{/authors/user/{id}(id=${author.id})}" th:text="${author.firstName + ' ' + author.lastName}"></a>
                     </h5>
                     <p class="card-text" th:if="${author.country}" th:text="${author.country}"></p>
                     <p class="card-text" th:if="${author.birthdate}" th:text="${#temporals.format(author.birthdate, 'dd.MM.yyyy')}"></p>
                 </div>
                 <div class="card-footer">
                     <div class="btn-group btn-group-sm">
-                        <a th:href="@{/authors/{id}(id=${author.id})}" class="btn btn-outline-primary">Подробнее</a>
-                        <a th:href="@{/authors/{id}/edit(id=${author.id})}" class="btn btn-outline-secondary">Редактировать</a>
+                        <a th:href="@{/authors/user/{id}(id=${author.id})}" class="btn btn-outline-primary">Подробнее</a>
                     </div>
                 </div>
             </div>
@@ -40,7 +36,7 @@
     </div>
 
     <div class="mt-4">
-        <div th:replace="fragments/pagination :: pagination(${authorPage}, '/authors', null)"></div>
+        <div th:replace="fragments/pagination :: pagination(${authorPage}, '/authors/user/authors', null)"></div>
     </div>
 </div>
 
