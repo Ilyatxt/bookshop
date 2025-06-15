@@ -1,6 +1,6 @@
 package com.example.bookshop.controller.api;
 
-import com.example.bookshop.dao.BookDao;
+import com.example.bookshop.facade.BookFacade;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +17,10 @@ import java.util.Map;
 @RequestMapping("/api/genres")
 public class GenreRestController {
 
-    private final BookDao bookDao;
+    private final BookFacade bookFacade;
 
-    public GenreRestController(BookDao bookDao) {
-        this.bookDao = bookDao;
+    public GenreRestController(BookFacade bookFacade) {
+        this.bookFacade = bookFacade;
     }
 
     /**
@@ -31,7 +31,7 @@ public class GenreRestController {
      */
     @GetMapping("/search")
     public ResponseEntity<List<Map<String, Object>>> searchGenres(@RequestParam("q") String query) {
-        List<Map<String, Object>> result = bookDao.searchGenres(query);
+        List<Map<String, Object>> result = bookFacade.searchGenres(query);
         return ResponseEntity.ok(result);
     }
 }
