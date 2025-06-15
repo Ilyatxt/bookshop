@@ -86,6 +86,10 @@ public class BookFacade {
         bookService.removeGenreFromBook(bookId, genreId);
     }
 
+    public java.util.List<java.util.Map<String, Object>> searchGenres(String query) {
+        return bookService.searchGenres(query);
+    }
+
 
 
 }

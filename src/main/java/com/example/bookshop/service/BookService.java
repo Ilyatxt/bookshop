@@ -135,6 +135,14 @@ public interface BookService {
     List<String> getAllGenres();
 
     /**
+     * Поиск жанров по части названия
+     *
+     * @param query часть названия жанра
+     * @return список жанров (id и name)
+     */
+    java.util.List<java.util.Map<String, Object>> searchGenres(String query);
+
+    /**
      * Получить книги по жанру с пагинацией
      *
      * @param genreName название жанра
