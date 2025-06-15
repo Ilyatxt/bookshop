@@ -1,3 +1,7 @@
+### Smart Tomcat Plugin ###
+.smartTomcat/
+smartTomcat/
+
 ### Maven ###
 /target/
 !.mvn/wrapper/maven-wrapper.jar
