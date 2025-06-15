@@ -1,22 +1,99 @@
-# Maven build directory
+### Maven ###
 /target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
 
-# Logs
-logs/
-*.log
+### Gradle ###
+build/
+.gradle/
 
-# IDE files
+### STS/Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
 .idea/
+*.iws
 *.iml
+*.ipr
 
-# VS Code
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
 .vscode/
 
-# OS files
+### Java ###
+# Compiled class files
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# JVM crash logs
+hs_err_pid*
+replay_pid*
+
+### Logs ###
+logs/
+*.log
+log/
+
+### OS Files ###
 .DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# Build directories
-build/
+### Application Specific ###
+application-local.properties
+application-dev.properties
+application-prod.properties
+application*.yml
+!application.yml
+!application.properties
 
-# Maven wrapper
-!.mvn/wrapper/maven-wrapper.jar
+### Security ###
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+
+### Docker ###
+.env
+
+### Node.js (if frontend included) ###
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
