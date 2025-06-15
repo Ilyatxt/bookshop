@@ -47,3 +47,45 @@
 2025-06-13 20:58:46.340 [main] INFO  c.e.b.service.impl.UserServiceImpl - UserServiceImpl инициализирован
 2025-06-13 20:58:46.342 [main] INFO  c.e.b.service.impl.UserServiceImpl - Попытка смены пароля для пользователя: ID=2
 2025-06-13 20:58:46.343 [main] INFO  c.e.b.service.impl.UserServiceImpl - Пароль успешно изменен для пользователя: ID=2
+2025-06-15 19:03:45.827 [main] WARN  c.e.bookshop.dao.impl.OrderDaoImpl - Заказ с id 5 не найден
+2025-06-15 19:03:45.833 [main] WARN  c.e.bookshop.dao.impl.OrderDaoImpl - Заказ с id 7 не найден для удаления
+2025-06-15 19:03:45.842 [main] INFO  c.e.b.dao.impl.OrderEntryDaoImpl - Позиция заказа с id 2 успешно удалена
+2025-06-15 19:03:45.845 [main] WARN  c.e.b.dao.impl.OrderEntryDaoImpl - Позиция заказа с id 1 не найдена
+2025-06-15 19:03:45.907 [main] DEBUG c.e.b.service.impl.AuthorServiceImpl - Поиск автора по id: 1
+2025-06-15 19:03:45.909 [main] ERROR c.e.b.service.impl.AuthorServiceImpl - Автор с id 1 не найден
+2025-06-15 19:03:45.912 [main] INFO  c.e.b.service.impl.AuthorServiceImpl - Обновление автора с id: 1
+2025-06-15 19:03:45.913 [main] DEBUG c.e.b.service.impl.AuthorServiceImpl - Поиск автора по id: 1
+2025-06-15 19:03:45.913 [main] DEBUG c.e.b.service.impl.AuthorServiceImpl - Найден автор: Author{id=1, firstName='null', lastName='null', birthdate=null, country='null'}
+2025-06-15 19:03:45.919 [main] DEBUG c.e.b.service.impl.AuthorServiceImpl - Найден автор для обновления: Author{id=1, firstName='null', lastName='null', birthdate=null, country='null'}
+2025-06-15 19:03:45.920 [main] DEBUG c.e.b.service.impl.AuthorServiceImpl - Применение обновлений к автору: Author{id=1, firstName='F', lastName='L', birthdate=null, country='null'}
+2025-06-15 19:03:45.920 [main] INFO  c.e.b.service.impl.AuthorServiceImpl - Автор с id: 1 успешно обновлен
+2025-06-15 19:03:45.924 [main] INFO  c.e.b.service.impl.AuthorServiceImpl - Удаление автора с id: 2
+2025-06-15 19:03:45.925 [main] DEBUG c.e.b.service.impl.AuthorServiceImpl - Поиск автора по id: 2
+2025-06-15 19:03:45.925 [main] DEBUG c.e.b.service.impl.AuthorServiceImpl - Найден автор: Author{id=2, firstName='null', lastName='null', birthdate=null, country='null'}
+2025-06-15 19:03:45.925 [main] ERROR c.e.b.service.impl.AuthorServiceImpl - Не удалось удалить автора с id: 2
+2025-06-15 19:03:45.953 [main] INFO  c.e.b.service.impl.BookServiceImpl - Создание новой книги: Book{id=0, title='T', language=null, isbn='null', publishedAt=null, price=null, currency=USD, soldCount=0, genres=null, authors=[Author{id=0, firstName='null', lastName='null', birthdate=null, country='null'}]}
+2025-06-15 19:03:45.962 [main] DEBUG c.e.b.service.impl.BookServiceImpl - Получение списка всех книг
+2025-06-15 19:03:45.962 [main] DEBUG c.e.b.service.impl.BookServiceImpl - Найдено 0 книг
+2025-06-15 19:03:45.964 [main] INFO  c.e.b.service.impl.BookServiceImpl - Удаление книги с id: 2
+2025-06-15 19:03:45.965 [main] DEBUG c.e.b.service.impl.BookServiceImpl - Поиск книги по id: 2
+2025-06-15 19:03:45.965 [main] DEBUG c.e.b.service.impl.BookServiceImpl - Найдена книга: Book{id=2, title='null', language=null, isbn='null', publishedAt=null, price=null, currency=USD, soldCount=0, genres=null, authors=null}
+2025-06-15 19:03:45.966 [main] ERROR c.e.b.service.impl.BookServiceImpl - Не удалось удалить книгу с id: 2
+2025-06-15 19:03:45.970 [main] DEBUG c.e.b.service.impl.BookServiceImpl - Поиск книги по id: 1
+2025-06-15 19:03:45.970 [main] ERROR c.e.b.service.impl.BookServiceImpl - Книга с id 1 не найдена
+2025-06-15 19:03:45.993 [main] INFO  c.e.b.service.impl.UserServiceImpl - UserServiceImpl инициализирован
+2025-06-15 19:03:45.996 [main] INFO  c.e.b.service.impl.UserServiceImpl - Попытка обновления профиля пользователя: ID=1
+2025-06-15 19:03:45.997 [main] INFO  c.e.b.service.impl.UserServiceImpl - Профиль пользователя успешно обновлен: ID=1, email=new@example.com
+2025-06-15 19:03:45.999 [main] INFO  c.e.b.service.impl.UserServiceImpl - UserServiceImpl инициализирован
+2025-06-15 19:03:46.000 [main] INFO  c.e.b.service.impl.UserServiceImpl - Попытка регистрации нового пользователя с email: dup@example.com
+2025-06-15 19:03:46.001 [main] WARN  c.e.b.service.impl.UserServiceImpl - Регистрация не удалась: пользователь с email dup@example.com уже существует
+2025-06-15 19:03:46.002 [main] INFO  c.e.b.service.impl.UserServiceImpl - UserServiceImpl инициализирован
+2025-06-15 19:03:46.004 [main] INFO  c.e.b.service.impl.UserServiceImpl - Попытка регистрации нового пользователя с email: test@example.com
+2025-06-15 19:03:46.004 [main] INFO  c.e.b.service.impl.UserServiceImpl - Пользователь успешно зарегистрирован: ID=0, email=test@example.com
+2025-06-15 19:03:46.007 [main] INFO  c.e.b.service.impl.UserServiceImpl - UserServiceImpl инициализирован
+2025-06-15 19:03:46.009 [main] INFO  c.e.b.service.impl.UserServiceImpl - Попытка смены пароля для пользователя: ID=2
+2025-06-15 19:03:46.010 [main] INFO  c.e.b.service.impl.UserServiceImpl - Пароль успешно изменен для пользователя: ID=2
+2025-06-15 19:03:46.028 [main] INFO  c.e.b.s.impl.OrderEntryServiceImpl - Создание 1 позиций заказа
+2025-06-15 19:03:46.031 [main] INFO  c.e.b.s.impl.OrderEntryServiceImpl - Удаление позиции заказа с id: 8
+2025-06-15 19:03:46.047 [main] INFO  c.e.b.service.impl.OrderServiceImpl - Удаление заказа с id: 10
+2025-06-15 19:03:46.051 [main] INFO  c.e.b.service.impl.OrderServiceImpl - Обновление статуса заказа 5 на PAID
+2025-06-15 19:03:46.055 [main] INFO  c.e.b.service.impl.OrderServiceImpl - Создание нового заказа

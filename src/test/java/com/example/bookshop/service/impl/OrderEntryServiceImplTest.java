@@ -1,5 +1,6 @@
 import com.example.bookshop.dao.OrderEntryDao;
 import com.example.bookshop.model.OrderEntry;
+import com.example.bookshop.service.impl.OrderEntryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

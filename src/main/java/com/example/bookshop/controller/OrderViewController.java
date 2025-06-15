@@ -8,7 +8,9 @@ import com.example.bookshop.model.Book;
 import com.example.bookshop.model.User;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.dao.UserDao;
+
 import java.security.Principal;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;

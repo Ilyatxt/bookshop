@@ -28,6 +28,7 @@ public class BookFacade {
      * необходимые связи.
      */
     public Book createBookWithRelations(Book book, String authorIds, String genreIds) {
+
         Book savedBook = createBook(book);
 
         if (authorIds != null && !authorIds.isEmpty()) {
