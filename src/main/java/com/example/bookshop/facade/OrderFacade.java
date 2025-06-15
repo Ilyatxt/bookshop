@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,6 +124,22 @@ public class OrderFacade {
     }
 
     /**
+     * Поиск заказов за указанный период с использованием локальных дат.
+     * Если даты не заданы, используется интервал в последние 30 дней.
+     */
+    public List<Order> searchOrdersByPeriod(java.time.LocalDate start, java.time.LocalDate end) {
+        if (start == null) {
+            start = java.time.LocalDate.now().minusDays(30);
+        }
+        if (end == null) {
+            end = java.time.LocalDate.now();
+        }
+        OffsetDateTime from = start.atStartOfDay().atOffset(ZoneOffset.UTC);
+        OffsetDateTime to = end.plusDays(1).atStartOfDay().atOffset(ZoneOffset.UTC);
+        return getOrdersByPeriod(from, to);
+    }
+
+    /**
      * Создать новый заказ с позициями
      * @param order заказ с позициями
      * @return созданный заказ с позициями и присвоенными ID
@@ -130,6 +147,10 @@ public class OrderFacade {
     @Transactional
     public Order createOrderWithEntries(Order order) {
         log.info("Создание нового заказа с позициями");
+
+        if (order.getOrderDate() == null) {
+            order.setOrderDate(OffsetDateTime.now());
+        }
 
         // Сохраняем заказ
         Order savedOrder = orderService.createOrder(order);
@@ -173,6 +194,19 @@ public class OrderFacade {
         }
 
         return updatedOrder;
+    }
+
+    /**
+     * Обновить заказ, если он существует. Возвращает Optional.empty, если
+     * заказ не найден.
+     */
+    @Transactional
+    public java.util.Optional<Order> updateOrderWithEntriesIfExists(long orderId, Order order) {
+        if (orderService.getOrderById(orderId).isEmpty()) {
+            return java.util.Optional.empty();
+        }
+        order.setId(orderId);
+        return java.util.Optional.of(updateOrderWithEntries(order));
     }
 
     /**
