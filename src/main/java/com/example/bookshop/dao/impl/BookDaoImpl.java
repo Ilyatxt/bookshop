@@ -5,6 +5,8 @@ import com.example.bookshop.model.Book;
 import com.example.bookshop.model.Currency;
 import com.example.bookshop.model.Language;
 import com.example.bookshop.model.Author;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -26,6 +28,8 @@ import java.util.*;
  */
 @Repository
 public class BookDaoImpl implements BookDao {
+
+    private static final Logger log = LoggerFactory.getLogger(BookDaoImpl.class);
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -100,19 +104,26 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<Book> findAll() {
+        log.debug("Получение списка всех книг");
         String sql = "SELECT * FROM books ORDER BY title";
-        return jdbcTemplate.query(sql, bookRowMapper);
+        List<Book> books = jdbcTemplate.query(sql, bookRowMapper);
+        log.debug("Найдено {} книг", books.size());
+        return books;
     }
 
     @Override
     public List<Book> findAll(int pageNumber, int pageSize) {
         int offset = pageNumber * pageSize;
+        log.debug("Получение книг: страница={}, размер={}", pageNumber, pageSize);
         String sql = "SELECT * FROM books ORDER BY title LIMIT ? OFFSET ?";
-        return jdbcTemplate.query(sql, bookRowMapper, pageSize, offset);
+        List<Book> books = jdbcTemplate.query(sql, bookRowMapper, pageSize, offset);
+        log.debug("Найдено {} книг на странице {}", books.size(), pageNumber);
+        return books;
     }
 
     @Override
     public long countAll() {
+        log.debug("Подсчет общего количества книг");
         String sql = "SELECT COUNT(*) FROM books";
         Long count = jdbcTemplate.queryForObject(sql, Long.class);
         return count != null ? count : 0L;
@@ -121,16 +132,19 @@ public class BookDaoImpl implements BookDao {
     @Override
     public Optional<Book> findById(long id) {
         try {
+            log.debug("Поиск книги по id: {}", id);
             String sql = "SELECT * FROM books WHERE id = ?";
             Book book = jdbcTemplate.queryForObject(sql, bookRowMapper, id);
             return Optional.ofNullable(book);
         } catch (EmptyResultDataAccessException e) {
+            log.warn("Книга с id {} не найдена", id);
             return Optional.empty();
         }
     }
 
     @Override
     public List<Book> findByTitle(String title) {
+        log.debug("Поиск книг по названию: {}", title);
         String sql = "SELECT * FROM books WHERE LOWER(title) LIKE LOWER(?) ORDER BY title";
         return jdbcTemplate.query(sql, bookRowMapper, "%" + title + "%");
     }
@@ -138,12 +152,14 @@ public class BookDaoImpl implements BookDao {
     @Override
     public List<Book> findByTitle(String title, int pageNumber, int pageSize) {
         int offset = pageNumber * pageSize;
+        log.debug("Поиск книг по названию: {} страница={}, размер={}", title, pageNumber, pageSize);
         String sql = "SELECT * FROM books WHERE LOWER(title) LIKE LOWER(?) ORDER BY title LIMIT ? OFFSET ?";
         return jdbcTemplate.query(sql, bookRowMapper, "%" + title + "%", pageSize, offset);
     }
 
     @Override
     public long countByTitle(String title) {
+        log.debug("Подсчет книг по названию: {}", title);
         String sql = "SELECT COUNT(*) FROM books WHERE LOWER(title) LIKE LOWER(?)";
         Long count = jdbcTemplate.queryForObject(sql, Long.class, "%" + title + "%");
         return count != null ? count : 0L;
@@ -152,16 +168,19 @@ public class BookDaoImpl implements BookDao {
     @Override
     public Optional<Book> findByIsbn(String isbn) {
         try {
+            log.debug("Поиск книги по ISBN {}", isbn);
             String sql = "SELECT * FROM books WHERE isbn = ?";
             Book book = jdbcTemplate.queryForObject(sql, bookRowMapper, isbn);
             return Optional.ofNullable(book);
         } catch (EmptyResultDataAccessException e) {
+            log.warn("Книга с ISBN {} не найдена", isbn);
             return Optional.empty();
         }
     }
 
     @Override
     public Book save(Book book) {
+        log.debug("Сохранение новой книги {}", book.getTitle());
         String sql = "INSERT INTO books (title, description, language_code, isbn, published_at, "
                 + "cover_image_url, price, currency, created_at, sold_count) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -193,11 +212,13 @@ public class BookDaoImpl implements BookDao {
 // Сохраняем жанры для книги, если они заданы
         saveBookGenres(book);
 
+        log.info("Книга сохранена с id {}", book.getId());
         return book;
     }
 
     @Override
     public Book update(Book book) {
+        log.debug("Обновление книги с id {}", book.getId());
         String sql = "UPDATE books SET title = ?, description = ?, language_code = ?, isbn = ?, " +
                 "published_at = ?, cover_image_url = ?, price = ?, currency = ?, sold_count = ? " +
                 "WHERE id = ?";
@@ -221,13 +242,20 @@ public class BookDaoImpl implements BookDao {
         // Обновляем жанры для книги
         updateBookGenres(book);
 
+        log.info("Книга с id {} успешно обновлена", book.getId());
         return book;
     }
 
     @Override
     public boolean deleteById(long id) {
         String sql = "DELETE FROM books WHERE id = ?";
-        return jdbcTemplate.update(sql, id) > 0;
+        int deleted = jdbcTemplate.update(sql, id);
+        if (deleted > 0) {
+            log.info("Книга с id {} удалена", id);
+            return true;
+        }
+        log.warn("Книга с id {} не найдена для удаления", id);
+        return false;
     }
 
     @Override

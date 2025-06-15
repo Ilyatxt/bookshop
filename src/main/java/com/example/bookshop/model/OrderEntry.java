@@ -1,5 +1,9 @@
 package com.example.bookshop.model;
 
+/**
+ * Позиция заказа.
+ */
+
 import java.math.BigDecimal;
 import java.util.Objects;
 

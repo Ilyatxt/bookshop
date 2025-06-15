@@ -9,6 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 
 
@@ -18,6 +20,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/authors")
 public class AuthorViewController {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthorViewController.class);
 
     private final AuthorService authorService;
     private final BookService bookService;
@@ -37,6 +41,7 @@ public class AuthorViewController {
     public String getAllAuthors(@RequestParam(defaultValue = "0", name = "page") int page,
                                 @RequestParam(defaultValue = "10", name = "size") int size,
                                 Model model) {
+        log.debug("Запрос списка авторов page={}, size={}", page, size);
         PageResponse<Author> authorPage = authorFacade.getAllAuthors(page, size);
         model.addAttribute("authorPage", authorPage);
         return "authors/list";
@@ -48,6 +53,7 @@ public class AuthorViewController {
     @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping("/{id}")
     public String getAuthorById(@PathVariable(name = "id") long id, Model model) {
+        log.debug("Запрос автора по id {}", id);
         Author author = authorService.getAuthorById(id);
         model.addAttribute("author", author);
         // Получаем книги автора
@@ -110,6 +116,7 @@ public class AuthorViewController {
     @PreAuthorize("hasRole('MODERATOR')")
     @PostMapping
     public String createAuthor(@ModelAttribute Author author) {
+        log.debug("Создание автора {} {}", author.getFirstName(), author.getLastName());
         Author savedAuthor = authorService.createAuthor(author);
         return "redirect:/authors/" + savedAuthor.getId();
     }

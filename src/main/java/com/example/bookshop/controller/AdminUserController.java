@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -19,6 +21,8 @@ import java.util.List;
 @RequestMapping("/admin/users")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminUserController {
+
+    private static final Logger log = LoggerFactory.getLogger(AdminUserController.class);
 
     private final UserService userService;
     private final OrderService orderService;
@@ -35,6 +39,7 @@ public class AdminUserController {
     public String listUsers(@RequestParam(defaultValue = "0", name = "page") int page,
                             @RequestParam(defaultValue = "10", name = "size") int size,
                             Model model) {
+        log.debug("Список пользователей page={}, size={}", page, size);
         List<User> users = userService.getUsersPage(page, size);
         long total = userService.countUsers();
         long totalPages = (total + size - 1) / size;
@@ -116,6 +121,7 @@ public class AdminUserController {
      */
     @PostMapping("/{id}/delete")
     public String deleteUser(@PathVariable(name = "id") long id) {
+        log.debug("Удаление пользователя {}", id);
         userService.deleteUser(id);
         return "redirect:/admin/users";
     }
