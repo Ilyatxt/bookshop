@@ -1,6 +1,6 @@
 ### Smart Tomcat Plugin ###
-.smartTomcat/
-smartTomcat/
+.smarttomcat/
+smarttomcat/
 
 ### Maven ###
 /target/

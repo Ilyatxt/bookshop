@@ -2,6 +2,7 @@ package com.example.bookshop.controller;
 
 import com.example.bookshop.dto.PageResponse;
 import com.example.bookshop.facade.BookFacade;
+import com.example.bookshop.model.Author;
 import com.example.bookshop.model.Book;
 import com.example.bookshop.service.AuthorService;
 import com.example.bookshop.service.BookService;
