@@ -72,6 +72,30 @@ public class BookViewController {
         return "books/detailsForUser";
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
+    @GetMapping("/genre/{name}")
+    public String getBooksByGenre(@PathVariable("name") String genre,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "10") int size,
+                                  Model model) {
+        PageResponse<Book> bookPage = bookService.getBooksByGenre(genre, page, size);
+        model.addAttribute("page", bookPage);
+        model.addAttribute("selectedGenre", genre);
+        return "books/list";
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/user/genre/{name}")
+    public String getBooksByGenreForUser(@PathVariable("name") String genre,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size,
+                                         Model model) {
+        PageResponse<Book> bookPage = bookService.getBooksByGenre(genre, page, size);
+        model.addAttribute("bookPage", bookPage);
+        model.addAttribute("selectedGenre", genre);
+        return "books/listForUser";
+    }
+
     /**
      * Страница поиска книг
      */

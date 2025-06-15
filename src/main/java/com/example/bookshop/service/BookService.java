@@ -127,4 +127,14 @@ public interface BookService {
 
     boolean removeGenreFromBook(long bookId, long genreId);
 
+    /**
+     * Получить книги по жанру с пагинацией
+     *
+     * @param genreName название жанра
+     * @param page      номер страницы
+     * @param size      размер страницы
+     * @return страницу с книгами указанного жанра
+     */
+    PageResponse<Book> getBooksByGenre(String genreName, int page, int size);
+
 }
