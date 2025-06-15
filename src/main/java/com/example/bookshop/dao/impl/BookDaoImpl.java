@@ -4,6 +4,7 @@ import com.example.bookshop.dao.BookDao;
 import com.example.bookshop.model.Book;
 import com.example.bookshop.model.Currency;
 import com.example.bookshop.model.Language;
+import com.example.bookshop.model.Author;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -42,8 +43,9 @@ public class BookDaoImpl implements BookDao {
         book.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
         book.setSoldCount(rs.getInt("sold_count"));
 
-        // Загрузка жанров для книги
+        // Загрузка жанров и авторов для книги
         loadGenresForBook(book);
+        loadAuthorsForBook(book);
 
         return book;
     };
@@ -64,6 +66,36 @@ public class BookDaoImpl implements BookDao {
 
         List<String> genres = jdbcTemplate.queryForList(sql, String.class, book.getId());
         book.setGenres(genres);
+    }
+
+    /**
+     * Загружает авторов для указанной книги из базы данных
+     *
+     * @param book книга, для которой нужно загрузить авторов
+     */
+    private void loadAuthorsForBook(Book book) {
+        String sql = "SELECT a.* FROM authors a " +
+                "JOIN book_authors ba ON a.id = ba.author_id " +
+                "WHERE ba.book_id = ? ORDER BY a.last_name, a.first_name";
+
+        RowMapper<Author> authorRowMapper = (rs, rowNum) -> {
+            Author author = new Author();
+            author.setId(rs.getLong("id"));
+            author.setFirstName(rs.getString("first_name"));
+            author.setLastName(rs.getString("last_name"));
+            author.setBio(rs.getString("bio"));
+
+            java.sql.Date birthdate = rs.getDate("birthdate");
+            if (birthdate != null) {
+                author.setBirthdate(birthdate.toLocalDate());
+            }
+
+            author.setCountry(rs.getString("country"));
+            return author;
+        };
+
+        List<Author> authors = jdbcTemplate.query(sql, authorRowMapper, book.getId());
+        book.setAuthors(authors);
     }
 
     @Override
