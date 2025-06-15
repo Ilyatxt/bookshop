@@ -5,54 +5,60 @@
     <title>Список книг</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div th:replace="fragments/header :: header"></div>
-    <div class="container mt-5">
-        <h1>Список книг</h1>
+<div th:replace="fragments/header :: header"></div>
 
-        <div class="d-flex justify-content-between mb-4">
-            <a th:href="@{/books/new}" class="btn btn-primary">Добавить книгу</a>
-            <a th:href="@{/books/top-selling}" class="btn btn-outline-success">Популярные книги</a>
-            <form th:action="@{/books/search}" method="get" class="d-flex">
-                <input type="text" name="title" class="form-control me-2" placeholder="Поиск по названию">
-                <button type="submit" class="btn btn-outline-primary">Поиск</button>
-            </form>
-        </div>
+<div class="container mt-5">
+    <h1>Список книг</h1>
 
-        <div class="alert alert-info" th:if="${page.content.isEmpty()}">
-            Книги не найдены.
-        </div>
+    <div class="d-flex justify-content-between mb-4">
+        <a th:href="@{/books/new}" class="btn btn-primary">Добавить книгу</a>
+        <a th:href="@{/books/top-selling}" class="btn btn-outline-success">Популярные книги</a>
+        <form th:action="@{/books/search}" method="get" class="d-flex">
+            <input type="text" name="title" class="form-control me-2" placeholder="Поиск по названию">
+            <button type="submit" class="btn btn-outline-primary">Поиск</button>
+        </form>
+    </div>
 
-        <div class="row row-cols-1 row-cols-md-3 g-4" th:unless="${page.content.isEmpty()}">
-            <div class="col" th:each="book : ${page.content}">
-                <div class="card h-100">
-                    <img th:if="${book.coverImageUrl}" th:src="${book.coverImageUrl}" class="card-img-top book-card-image" alt="Обложка книги">
-                    <div th:unless="${book.coverImageUrl}" class="card-img-top book-placeholder">
-                        <span class="text-muted">Нет обложки</span>
+    <div class="alert alert-info" th:if="${page.content.isEmpty()}">
+        Книги не найдены.
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4" th:unless="${page.content.isEmpty()}">
+        <div class="col" th:each="book : ${page.content}">
+            <div class="card h-100">
+                <!-- Унифицированный img с fallback -->
+                <img th:src="${book.coverImageUrl}"
+                     class="card-img-top book-card-image"
+                     alt="Обложка книги"
+                     onerror="this.onerror=null; this.src='https://cdni.iconscout.com/illustration/premium/thumb/error-404-illustration-download-in-svg-png-gif-file-formats--not-found-page-webpage-pack-design-development-illustrations-5501655.png';">
+
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${book.title}">Название книги</h5>
+                    <p class="card-text text-truncate" th:text="${book.description}">Описание книги</p>
+                    <p class="card-text">
+                        <small class="text-muted" th:text="'ISBN: ' + ${book.isbn}">ISBN: 123456789</small>
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary" th:text="${book.price} + ' ' + ${book.currency}">Цена</span>
+                        <span class="badge bg-secondary" th:text="'Продано: ' + ${book.soldCount}">Продано: 0</span>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${book.title}">Название книги</h5>
-                        <p class="card-text text-truncate" th:text="${book.description}">Описание книги</p>
-                        <p class="card-text"><small class="text-muted" th:text="'ISBN: ' + ${book.isbn}">ISBN: 123456789</small></p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="badge bg-primary" th:text="${book.price} + ' ' + ${book.currency}">Цена</span>
-                            <span class="badge bg-secondary" th:text="'Продано: ' + ${book.soldCount}">Продано: 0</span>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-sm btn-outline-primary">Подробнее</a>
-                        <a th:href="@{/books/{id}/edit(id=${book.id})}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
-                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                    <a th:href="@{/books/{id}/edit(id=${book.id})}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
                 </div>
             </div>
         </div>
-
-        <div class="mt-4">
-            <div th:replace="fragments/pagination :: pagination(${page}, '/books', null)"></div>
-        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="mt-4">
+        <div th:replace="fragments/pagination :: pagination(${page}, '/books', null)"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

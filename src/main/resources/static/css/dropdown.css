@@ -1,10 +1,10 @@
 .z-index-dropdown {
     z-index: 1050;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .list-group-item-action:hover {
-    background-color: #f8f9fa;
+    background-color: #f5e5d7;
     cursor: pointer;
 }
 

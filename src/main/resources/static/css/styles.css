@@ -1,9 +1,9 @@
 /* Базовые стили */
 body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f5f5f5;
+    font-family: 'Georgia', serif;
+    line-height: 1.7;
+    color: #444;
+    background-color: #fdf8f2;
     margin: 0;
     padding: 0;
 }
@@ -12,38 +12,48 @@ body {
 .login-container,
 .register-container {
     max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 60px auto;
+    padding: 30px;
+    background: #fffef9;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 
 h1 {
     text-align: center;
-    color: #2c3e50;
-    margin-bottom: 20px;
+    color: #5a3e36;
+    margin-bottom: 25px;
+    font-weight: normal;
 }
 
 /* Стили для форм */
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     font-weight: bold;
+    color: #5a3e36;
 }
 
 input[type="text"],
 input[type="email"],
 input[type="password"] {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 6px;
     box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #d5a87f;
+    outline: none;
 }
 
 .remember-me {
@@ -56,61 +66,122 @@ input[type="password"] {
 }
 
 .form-actions {
-    margin-top: 20px;
+    margin-top: 25px;
     text-align: center;
 }
 
 .btn-primary {
-    background-color: #3498db;
-    color: white;
+    background-color: #d5a87f;
+    color: #fff;
     border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
+    padding: 12px 25px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s;
 }
 
 .btn-primary:hover {
-    background-color: #2980b9;
+    background-color: #c79262;
 }
 
 /* Сообщения об ошибках и успехе */
 .alert {
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 6px;
 }
 
 .alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
+    background-color: #fbe9e9;
+    color: #a94442;
     border: 1px solid #f5c6cb;
 }
 
 .alert-success {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: #e9f7ef;
+    color: #3c763d;
     border: 1px solid #c3e6cb;
 }
 
 .alert-warning {
-    background-color: #fff3cd;
-    color: #856404;
+    background-color: #fff8e1;
+    color: #8a6d3b;
     border: 1px solid #ffeeba;
 }
 
 /* Ссылки */
 .links {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .links a {
-    color: #3498db;
+    color: #d5a87f;
     text-decoration: none;
-    margin: 0 10px;
+    margin: 0 12px;
+    font-weight: bold;
 }
 
 .links a:hover {
     text-decoration: underline;
 }
+/* Шапка сайта */
+header {
+    background: #fffef9;
+    border-bottom: 1px solid #e0d6c5;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-family: 'Georgia', serif;
+    color: #5a3e36;
+    font-size: 28px;
+}
+
+header nav a {
+    color: #5a3e36;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+header nav a:hover {
+    color: #c79262;
+}
+
+header .btn {
+    margin-left: 10px;
+    padding: 6px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+header .btn-search {
+    background: #d5a87f;
+    color: #fff;
+}
+
+header .btn-search:hover {
+    background: #c79262;
+}
+
+header .btn-logout {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+header .btn-logout:hover {
+    background: #f1b0b7;
+}
+
+
+

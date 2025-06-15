@@ -1,32 +1,14 @@
-/* Основные стили приложения */
-
-.page-header {
-    border-bottom: 1px solid #eee;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-}
-
-.book-card-image {
-    height: 200px;
-    object-fit: contain;
-}
-
-.book-placeholder {
-    background-color: #f8f9fa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 200px;
-}
-
-/* Стили для карточек книг */
 .book-card {
-    transition: transform 0.3s ease-in-out;
+    background: #fffef9;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
 .book-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
 }
 
 /* Стили для списка подсказок авторов */
@@ -34,4 +16,7 @@
     z-index: 1000;
     max-height: 200px;
     overflow-y: auto;
+    background: #fffef9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
