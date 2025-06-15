@@ -1,5 +1,9 @@
 package com.example.bookshop.model;
 
+/**
+ * Сущность пользователя.
+ */
+
 import java.time.*;
 import java.util.Objects;
 

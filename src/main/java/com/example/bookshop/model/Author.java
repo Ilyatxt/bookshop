@@ -1,5 +1,9 @@
 package com.example.bookshop.model;
 
+/**
+ * Модель автора книги.
+ */
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -30,6 +34,9 @@ public class Author {
         this.country = country;
     }
 
+    /**
+     * Возвращает идентификатор автора.
+     */
     public long getId() {
         return id;
     }

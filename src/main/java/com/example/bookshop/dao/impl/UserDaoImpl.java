@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -22,6 +24,8 @@ import java.util.Optional;
  */
 @Repository
 public class UserDaoImpl implements UserDao {
+
+    private static final Logger log = LoggerFactory.getLogger(UserDaoImpl.class);
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -47,6 +51,7 @@ public class UserDaoImpl implements UserDao {
          */
         @Override
     public Optional<User> findById(long id) {
+        log.debug("Поиск пользователя по id {}", id);
         String sql = "SELECT * FROM users WHERE id = ?";
         List<User> users = jdbcTemplate.query(sql, userRowMapper, id);
         return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
@@ -57,6 +62,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public Optional<User> findByEmail(String email) {
+        log.debug("Поиск пользователя по email {}", email);
         String sql = "SELECT * FROM users WHERE email = ?";
         List<User> users = jdbcTemplate.query(sql, userRowMapper, email);
         return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
@@ -67,6 +73,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public Optional<User> findByUsername(String username) {
+        log.debug("Поиск пользователя по username {}", username);
         String sql = "SELECT * FROM users WHERE username = ?";
         List<User> users = jdbcTemplate.query(sql, userRowMapper, username);
         return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
@@ -77,8 +84,11 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public List<User> findAll() {
+        log.debug("Получение списка всех пользователей");
         String sql = "SELECT * FROM users";
-        return jdbcTemplate.query(sql, userRowMapper);
+        List<User> users = jdbcTemplate.query(sql, userRowMapper);
+        log.debug("Найдено {} пользователей", users.size());
+        return users;
     }
 
     /**
@@ -97,6 +107,7 @@ public class UserDaoImpl implements UserDao {
      * Добавление нового пользователя
      */
     private User insert(User user) {
+        log.debug("Создание пользователя {}", user.getUsername());
         String sql = "INSERT INTO users (username, email, password_hash, role, created_at) VALUES (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -116,6 +127,7 @@ public class UserDaoImpl implements UserDao {
         if (user.getCreatedAt() == null) {
             user.setCreatedAt(LocalDateTime.now());
         }
+        log.info("Пользователь создан с id {}", user.getId());
         return user;
     }
 
@@ -123,6 +135,7 @@ public class UserDaoImpl implements UserDao {
      * Обновление существующего пользователя
      */
     private User update(User user) {
+        log.debug("Обновление пользователя с id {}", user.getId());
         String sql = "UPDATE users SET username = ?, email = ?, password_hash = ?, role = ? WHERE id = ?";
         jdbcTemplate.update(sql,
                 user.getUsername(),
@@ -130,6 +143,7 @@ public class UserDaoImpl implements UserDao {
                 user.getPasswordHash(),
                 user.getRole().name(),
                 user.getId());
+        log.info("Пользователь с id {} обновлен", user.getId());
         return user;
     }
     /**
@@ -137,6 +151,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void updateUserRole(long userId, Role role) {
+        log.debug("Изменение роли пользователя {} на {}", userId, role);
         String sql = "UPDATE users SET role = ? WHERE id = ?";
         jdbcTemplate.update(sql, role.name(), userId);
     }
@@ -146,6 +161,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void delete(long id) {
+        log.debug("Удаление пользователя с id {}", id);
         String sql = "DELETE FROM users WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +21,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/authors")
 public class AuthorRestController {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthorRestController.class);
 
     private final AuthorFacade authorFacade;
 
@@ -34,6 +38,7 @@ public class AuthorRestController {
      */
     @GetMapping("/search")
     public ResponseEntity<List<Map<String, Object>>> searchAuthors(@RequestParam("q") String query) {
+        log.debug("REST поиск авторов по запросу {}", query);
         List<Map<String, Object>> result = new ArrayList<>();
 
         List<Author> authors = authorFacade.searchAuthorsByName(query);
