@@ -88,6 +88,21 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    public List<Order> findByUserIdAndStatusIn(long userId, List<OrderStatus> statuses) {
+        if (statuses == null || statuses.isEmpty()) {
+            return List.of();
+        }
+        String inSql = String.join(",", java.util.Collections.nCopies(statuses.size(), "?"));
+        String sql = "SELECT * FROM orders WHERE user_id = ? AND status IN (" + inSql + ") ORDER BY order_date DESC";
+        Object[] args = new Object[statuses.size() + 1];
+        args[0] = userId;
+        for (int i = 0; i < statuses.size(); i++) {
+            args[i + 1] = statuses.get(i).name();
+        }
+        return jdbcTemplate.query(sql, args, orderRowMapper);
+    }
+
+    @Override
     public Optional<Order> findByOrderCode(String orderCode) {
         try {
             String sql = "SELECT * FROM orders WHERE order_code = ?";
@@ -151,6 +166,12 @@ public class OrderDaoImpl implements OrderDao {
 
         log.info("Заказ с id {} успешно обновлен", order.getId());
         return order;
+    }
+
+    @Override
+    public int updateStatus(long id, OrderStatus status) {
+        String sql = "UPDATE orders SET status = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, status.name(), id);
     }
 
     @Override

@@ -106,6 +106,13 @@ public class OrderFacade {
     }
 
     /**
+     * Получить заказы пользователя по статусам
+     */
+    public List<Order> getUserOrdersByStatuses(long userId, List<OrderStatus> statuses) {
+        return orderService.getOrdersByUserIdAndStatuses(userId, statuses);
+    }
+
+    /**
      * Получить список заказов за период
      * @param startDate начальная дата
      * @param endDate конечная дата
@@ -202,6 +209,14 @@ public class OrderFacade {
             orderService.updateOrder(order);
             return order;
         }
+    }
+
+    /**
+     * Обновить статус заказа
+     */
+    @Transactional
+    public void updateOrderStatus(long orderId, OrderStatus status) {
+        orderService.updateOrderStatus(orderId, status);
     }
 
     /**
