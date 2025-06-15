@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Поиск книг</title>
@@ -12,7 +12,7 @@
 <div class="container mt-5">
     <h1>Поиск книг</h1>
 
-    <form th:action="@{/books/search}" method="get" class="mb-4">
+    <form th:action="@{/books/user/search}" method="get" class="mb-4">
         <div class="input-group">
             <input type="text" name="title" class="form-control" placeholder="Введите название книги" th:value="${searchTerm}">
             <button class="btn btn-primary" type="submit">Поиск</button>
@@ -33,28 +33,23 @@
                 <div class="card-body">
                     <h5 class="card-title" th:text="${book.title}">Название книги</h5>
                     <p class="card-text text-truncate" th:text="${book.description}">Описание книги</p>
-                    <p class="card-text">
-                        <small class="text-muted" th:text="'ISBN: ' + ${book.isbn}">ISBN: 123456789</small>
-                    </p>
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="badge bg-primary" th:text="${book.price} + ' ' + ${book.currency}">Цена</span>
-                        <span class="badge bg-secondary" th:text="'Продано: ' + ${book.soldCount}">Продано: 0</span>
                     </div>
                     <div class="mt-2 d-flex flex-wrap gap-1" th:if="${book.genres}">
-                        <a th:each="g : ${book.genres}" th:href="@{/books/genre/{name}(name=${g})}" class="badge bg-success text-decoration-none">[[${g}]]</a>
+                        <a th:each="g : ${book.genres}" th:href="@{/books/user/genre/{name}(name=${g})}" class="badge bg-success text-decoration-none">[[${g}]]</a>
                     </div>
                 </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-sm btn-outline-primary">Подробнее</a>
-                    <a th:href="@{/books/{id}/edit(id=${book.id})}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                <div class="card-footer">
+                    <a th:href="@{/books/user/{id}(id=${book.id})}" class="btn btn-sm btn-outline-primary">Подробнее</a>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="mt-4" th:with="searchParams='title=' + ${searchTerm != null ? searchTerm : ''}">
-        <div th:replace="fragments/pagination :: pagination(${bookPage}, '/books/search', ${searchParams})"></div>
-        <a th:href="@{/books}" class="btn btn-outline-secondary mt-3">Все книги</a>
+        <div th:replace="fragments/pagination :: pagination(${bookPage}, '/books/user/search', ${searchParams})"></div>
+        <a th:href="@{/books/user/books}" class="btn btn-outline-secondary mt-3">Все книги</a>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
