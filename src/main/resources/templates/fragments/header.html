@@ -25,7 +25,7 @@
             </form>
 
             <div class="d-flex">
-                <a class="btn btn-outline-primary me-2" th:href="@{/orders}" sec:authorize="hasRole('USER')">Заказы</a>
+                <a class="btn btn-outline-primary me-2" th:href="@{/profile}" sec:authorize="hasRole('USER')">Профиль</a>
                 <a class="btn btn-outline-primary me-2" th:href="@{/admin/users}" sec:authorize="hasRole('ADMIN')">Пользователи</a>
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" class="btn btn-outline-danger">Выйти</button>
