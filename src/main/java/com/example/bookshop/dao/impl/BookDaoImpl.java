@@ -383,4 +383,10 @@ public class BookDaoImpl implements BookDao {
             return map;
         }, "%" + query + "%");
     }
+
+    @Override
+    public List<String> findAllGenres() {
+        String sql = "SELECT name FROM genres ORDER BY name";
+        return jdbcTemplate.queryForList(sql, String.class);
+    }
 }

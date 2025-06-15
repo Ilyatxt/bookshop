@@ -128,6 +128,13 @@ public interface BookService {
     boolean removeGenreFromBook(long bookId, long genreId);
 
     /**
+     * Получить список всех жанров
+     *
+     * @return список названий жанров
+     */
+    List<String> getAllGenres();
+
+    /**
      * Получить книги по жанру с пагинацией
      *
      * @param genreName название жанра

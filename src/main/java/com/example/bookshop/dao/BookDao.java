@@ -189,4 +189,11 @@ public interface BookDao {
      * @return список жанров (id и name)
      */
     List<Map<String, Object>> searchGenres(String query);
+
+    /**
+     * Получить список всех жанров
+     *
+     * @return список названий жанров
+     */
+    List<String> findAllGenres();
 }
