@@ -1,6 +1,5 @@
 package com.example.bookshop.config;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,9 +7,10 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import jakarta.annotation.PreDestroy;
+import com.example.bookshop.config.ConnectionPool;
+import com.example.bookshop.config.ConnectionPoolDataSource;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 
 /**
  * Конфигурация базы данных приложения с использованием пула соединений
@@ -46,38 +46,18 @@ public class DatabaseConfig {
     @Value("${db.pool.maxWaitMillis:10000}")
     private long maxWaitMillis;
 
-    private BasicDataSource dataSource;
+    private ConnectionPool connectionPool;
 
     /**
-     * Создает и настраивает источник данных с пулом соединений
-     * 
-     * @return настроенный источник данных с пулом соединений
+     * Создает и настраивает {@link ConnectionPool} и соответствующий {@link DataSource}.
+     *
+     * @return источник данных, использующий пул соединений
      */
     @Bean
     @Primary
     public DataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(dbDriver);
-        dataSource.setUrl(dbUrl);
-        dataSource.setUsername(dbUsername);
-        dataSource.setPassword(dbPassword);
-
-        // Настройка пула соединений
-        dataSource.setInitialSize(initialSize);
-        dataSource.setMaxTotal(maxTotal);
-        dataSource.setMaxIdle(maxIdle);
-        dataSource.setMinIdle(minIdle);
-        dataSource.setMaxWaitMillis(maxWaitMillis);
-
-        // Дополнительные настройки для повышения производительности
-        dataSource.setTestOnBorrow(true);
-        dataSource.setTestWhileIdle(true);
-        dataSource.setValidationQuery("SELECT 1");
-        dataSource.setValidationQueryTimeout(5);
-        dataSource.setTimeBetweenEvictionRunsMillis(30000);
-
-        this.dataSource = dataSource;
-        return dataSource;
+        connectionPool = new ConnectionPool(dbUrl, dbUsername, dbPassword, maxTotal);
+        return new ConnectionPoolDataSource(connectionPool);
     }
 
     /**
@@ -95,13 +75,9 @@ public class DatabaseConfig {
      * Закрывает пул соединений при остановке приложения
      */
     @PreDestroy
-    public void closeDataSource() {
-        if (dataSource != null) {
-            try {
-                dataSource.close();
-            } catch (SQLException e) {
-                throw new RuntimeException("Ошибка при закрытии пула соединений", e);
-            }
+    public void closeConnectionPool() {
+        if (connectionPool != null) {
+            connectionPool.closeAllConnections();
         }
     }
 }
