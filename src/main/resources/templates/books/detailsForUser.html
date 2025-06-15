@@ -10,37 +10,6 @@
 <body>
     <div th:replace="fragments/header :: header"></div>
 <div class="container mt-5">
-    <!-- Блок с информацией об авторах -->
-    <div class="card mb-4" th:if="${book.authors != null and !book.authors.isEmpty()}">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Авторы книги</h4>
-        </div>
-        <div class="card-body">
-            <div class="d-flex flex-wrap gap-2">
-                <a th:each="author : ${book.authors}"
-                   th:href="@{/authors/{id}(id=${author.id})}"
-                   class="btn btn-outline-primary">
-                    <span th:text="${author.firstName + ' ' + author.lastName}">Имя Автора</span>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Блок с жанрами книги -->
-    <div class="card mb-4" th:if="${book.genres != null and !book.genres.isEmpty()}">
-        <div class="card-header bg-success text-white">
-            <h4 class="mb-0">Жанры книги</h4>
-        </div>
-        <div class="card-body">
-            <div class="d-flex flex-wrap gap-2">
-                <a th:each="genre : ${book.genres}"
-                   th:href="@{/books/user/genre/{name}(name=${genre})}"
-                   class="badge bg-success p-2 fs-6 text-decoration-none">
-                    <span th:text="${genre}">Жанр</span>
-                </a>
-            </div>
-        </div>
-    </div>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a th:href="@{/books/user/books}">Книги</a></li>
@@ -73,6 +42,38 @@
         <div class="col-md-8">
             <h1 th:text="${book.title}">Название книги</h1>
             <p class="lead" th:text="${book.description}">Описание книги</p>
+
+            <!-- Авторы и жанры под описанием -->
+            <div class="card mb-4" th:if="${book.authors != null and !book.authors.isEmpty()}">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Авторы книги</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-2">
+                        <a th:each="author : ${book.authors}"
+                           th:href="@{/authors/user/{id}(id=${author.id})}"
+                           class="btn btn-outline-primary">
+                            <span th:text="${author.firstName + ' ' + author.lastName}">Имя Автора</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4" th:if="${book.genres != null and !book.genres.isEmpty()}">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Жанры книги</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-2">
+                        <a th:each="genre : ${book.genres}"
+                           th:href="@{/books/user/genre/{name}(name=${genre})}"
+                           class="badge bg-success p-2 fs-6 text-decoration-none">
+                            <span th:text="${genre}">Жанр</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <a th:href="@{/orders/buy/{id}(id=${book.id})}" class="btn btn-primary me-2">Купить</a>
             <a th:href="@{/books/user/books}" class="btn btn-outline-secondary">Назад к списку</a>
             </div>
