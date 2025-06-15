@@ -31,8 +31,8 @@
                     <button type="submit" class="btn btn-outline-danger">Выйти</button>
                 </form>
                 <div class="ms-2">
-                    <a class="btn btn-outline-secondary btn-sm me-1" th:href="@{/?lang=en}">EN</a>
-                    <a class="btn btn-outline-secondary btn-sm" th:href="@{/?lang=ru}">RU</a>
+                    <a class="btn btn-outline-secondary btn-sm me-1" th:href="@{${#httpServletRequest.requestURI}(lang='en')}">EN</a>
+                    <a class="btn btn-outline-secondary btn-sm" th:href="@{${#httpServletRequest.requestURI}(lang='ru')}">RU</a>
                 </div>
             </div>
         </div>
