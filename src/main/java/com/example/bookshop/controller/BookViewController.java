@@ -50,8 +50,8 @@ public class BookViewController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("user/books")
-    public String getAllBoosForUser(@RequestParam(defaultValue = "0") int page,
-                                    @RequestParam(defaultValue = "10") int size,
+    public String getAllBoosForUser(@RequestParam(defaultValue = "0",name = "page") int page,
+                                    @RequestParam(defaultValue = "10", name = "size") int size,
                                     Model model) {
         PageResponse<Book> bookPage = bookService.getAllBooks(page, size);
         model.addAttribute("bookPage", bookPage);
