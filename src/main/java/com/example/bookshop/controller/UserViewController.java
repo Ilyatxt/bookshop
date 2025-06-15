@@ -1,6 +1,7 @@
 package com.example.bookshop.controller;
 
 import com.example.bookshop.model.User;
+import com.example.bookshop.service.OrderService;
 import com.example.bookshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +16,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserViewController {
 
     private final UserService userService;
+    private final OrderService orderService;
 
     @Autowired
-    public UserViewController(UserService userService) {
+    public UserViewController(UserService userService, OrderService orderService) {
         this.userService = userService;
+        this.orderService = orderService;
     }
 
     /**
@@ -29,52 +32,51 @@ public class UserViewController {
      * Профиль пользователя
      */
     @GetMapping("/profile")
-    public String showUserProfile(Model model) {
-        // В реальном приложении здесь будет получение текущего пользователя из сессии
-        // Например: User user = getCurrentUser();
+    public String showUserProfile(Model model, java.security.Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
 
-        // Временная заглушка - потом заменить на получение реального пользователя
-        User dummyUser = new User();
-        dummyUser.setUsername("Текущий пользователь");
-
-        model.addAttribute("user", dummyUser);
-        return "users/profile";
+        return userService.findByUsername(principal.getName())
+                .map(u -> {
+                    model.addAttribute("user", u);
+                    model.addAttribute("orders", orderService.getOrdersByUserId(u.getId()));
+                    return "users/profile";
+                })
+                .orElse("redirect:/login");
     }
 
     /**
      * Форма изменения пароля
      */
-    @GetMapping("/change-password")
+    @GetMapping("/profile/password")
     public String showChangePasswordForm() {
-        return "users/change-password";
+        return "users/change-password-user";
     }
 
     /**
      * Обработка формы изменения пароля
      */
-    @PostMapping("/change-password")
+    @PostMapping("/profile/password")
     public String processChangePassword(
-            @RequestParam("currentPassword") String currentPassword,
             @RequestParam("newPassword") String newPassword,
+            java.security.Principal principal,
             RedirectAttributes redirectAttributes) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
 
         try {
-            // Получение текущего пользователя - в реальном приложении из сессии
-            // User currentUser = getCurrentUser();
-
-            // Временная заглушка - потом заменить на получение реального пользователя
-            User dummyUser = new User();
-            dummyUser.setId(1L);
-
-            // Изменение пароля
-            userService.changePassword(dummyUser, newPassword);
-
-            redirectAttributes.addFlashAttribute("message", "Пароль успешно изменен");
-            return "redirect:/users/profile";
-
+            return userService.findByUsername(principal.getName())
+                    .map(u -> {
+                        userService.changePassword(u, newPassword);
+                        redirectAttributes.addFlashAttribute("message", "Пароль успешно изменен");
+                        return "redirect:/profile";
+                    })
+                    .orElse("redirect:/login");
         } catch (Exception e) {
-            redirectAttributes.addAttribute("error", "Ошибка при смене пароля: " + e.getMessage());
-            return "redirect:/users/change-password";
+            redirectAttributes.addFlashAttribute("error", "Ошибка при смене пароля: " + e.getMessage());
+            return "redirect:/profile/password";
         }
     }
 }
