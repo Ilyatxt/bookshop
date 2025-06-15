@@ -11,7 +11,10 @@
         <h1>Каталог книг</h1>
 
         <div class="d-flex justify-content-between mb-4">
-            <a th:href="@{/books/top-selling}" class="btn btn-outline-success">Популярные книги</a>
+            <div>
+                <a th:href="@{/books/top-selling}" class="btn btn-outline-success me-2">Популярные книги</a>
+                <a th:href="@{/orders/my}" class="btn btn-outline-primary">Заказ</a>
+            </div>
             <form th:action="@{/books/search}" method="get" class="d-flex">
                 <input type="text" name="title" class="form-control me-2" placeholder="Поиск по названию">
                 <button type="submit" class="btn btn-outline-primary">Поиск</button>

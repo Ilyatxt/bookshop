@@ -8,6 +8,8 @@
 <body>
 <div class="container mt-5">
     <h1>Детали заказа</h1>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
     <div>
         <p><strong>ID:</strong> <span th:text="${order.id}"></span></p>
         <p><strong>Код:</strong> <span th:text="${order.orderCode}"></span></p>
@@ -37,7 +39,15 @@
         </tbody>
     </table>
 
-    <a th:href="@{/orders}" class="btn btn-secondary">К списку</a>
+    <div class="mt-3">
+        <form th:if="${order.status.name() == 'NEW' or order.status.name() == 'IN_PROCESS'}" th:action="@{'/orders/' + ${order.id} + '/pay'}" method="post" style="display:inline">
+            <button type="submit" class="btn btn-success me-2">Оплатить</button>
+        </form>
+        <form th:if="${order.status.name() == 'NEW' or order.status.name() == 'IN_PROCESS'}" th:action="@{'/orders/' + ${order.id} + '/cancel'}" method="post" style="display:inline">
+            <button type="submit" class="btn btn-danger me-2">Отменить</button>
+        </form>
+        <a th:href="@{/orders}" class="btn btn-secondary">К списку</a>
+    </div>
 </div>
 </body>
 </html>

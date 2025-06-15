@@ -8,6 +8,8 @@
 <body>
 <div class="container mt-5">
     <h1>Заказы пользователя <span th:text="${userId}"></span></h1>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -26,7 +28,15 @@
             <td th:text="${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}"></td>
             <td th:text="${order.totalPrice} + ' ' + ${order.currency}"></td>
             <td th:text="${order.status}"></td>
-            <td><a th:href="@{'/orders/' + ${order.id}}" class="btn btn-sm btn-outline-primary">Просмотр</a></td>
+            <td>
+                <a th:href="@{'/orders/' + ${order.id}}" class="btn btn-sm btn-outline-primary me-1">Просмотр</a>
+                <form th:if="${order.status.name() == 'NEW' or order.status.name() == 'IN_PROCESS'}" th:action="@{'/orders/' + ${order.id} + '/pay'}" method="post" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-success me-1">Оплатить</button>
+                </form>
+                <form th:if="${order.status.name() == 'NEW' or order.status.name() == 'IN_PROCESS'}" th:action="@{'/orders/' + ${order.id} + '/cancel'}" method="post" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-danger">Отменить</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

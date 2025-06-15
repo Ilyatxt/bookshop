@@ -106,6 +106,18 @@ public class OrderViewController {
     }
 
     /**
+     * Заказы текущего пользователя со статусом NEW или IN_PROCESS
+     */
+    @GetMapping("/my")
+    public String listCurrentUserOrders(Principal principal, Model model) {
+        User user = userDao.findByUsername(principal.getName()).orElseThrow();
+        List<Order> orders = orderFacade.getUserOrdersByStatuses(user.getId(), List.of(OrderStatus.NEW, OrderStatus.IN_PROCESS));
+        model.addAttribute("orders", orders);
+        model.addAttribute("userId", user.getId());
+        return "orders/user-orders";
+    }
+
+    /**
      * Форма для создания нового заказа
      */
     @GetMapping("/create")
@@ -253,5 +265,25 @@ public class OrderViewController {
         orderFacade.addBookToUserOrder(user.getId(), bookId, quantity);
         redirectAttributes.addFlashAttribute("success", "Книга добавлена в заказ");
         return "redirect:/books/user/" + bookId;
+    }
+
+    /**
+     * Оплата заказа
+     */
+    @PostMapping("/{orderId}/pay")
+    public String payOrder(@PathVariable(name = "orderId") long orderId, RedirectAttributes redirectAttributes) {
+        orderFacade.updateOrderStatus(orderId, OrderStatus.PAID);
+        redirectAttributes.addFlashAttribute("success", "Заказ оплачен");
+        return "redirect:/orders/" + orderId;
+    }
+
+    /**
+     * Отмена заказа
+     */
+    @PostMapping("/{orderId}/cancel")
+    public String cancelOrder(@PathVariable(name = "orderId") long orderId, RedirectAttributes redirectAttributes) {
+        orderFacade.updateOrderStatus(orderId, OrderStatus.DECLINED);
+        redirectAttributes.addFlashAttribute("success", "Заказ отменен");
+        return "redirect:/orders/" + orderId;
     }
 }

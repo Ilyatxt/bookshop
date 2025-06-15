@@ -46,6 +46,15 @@ public interface OrderService {
     List<Order> getOrdersByUserId(long userId);
 
     /**
+     * Найти заказы пользователя по статусам
+     *
+     * @param userId   идентификатор пользователя
+     * @param statuses список статусов
+     * @return список заказов пользователя с указанными статусами
+     */
+    List<Order> getOrdersByUserIdAndStatuses(long userId, java.util.List<com.example.bookshop.model.OrderStatus> statuses);
+
+    /**
      * Найти заказ по коду заказа
      * @param orderCode код заказа
      * @return заказ или пустой Optional, если заказ не найден
@@ -73,6 +82,14 @@ public interface OrderService {
      * @return обновленный заказ
      */
     Order updateOrder(Order order);
+
+    /**
+     * Обновить статус заказа
+     *
+     * @param orderId идентификатор заказа
+     * @param status  новый статус
+     */
+    void updateOrderStatus(long orderId, com.example.bookshop.model.OrderStatus status);
 
     /**
      * Удалить заказ по ID
