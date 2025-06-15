@@ -60,6 +60,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getOrdersByUserIdAndStatuses(long userId, List<OrderStatus> statuses) {
+        log.debug("Поиск заказов пользователя {} со статусами {}", userId, statuses);
+        return orderDao.findByUserIdAndStatusIn(userId, statuses);
+    }
+
+    @Override
     public Optional<Order> getOrderByCode(String orderCode) {
         log.debug("Поиск заказа по коду: {}", orderCode);
         return orderDao.findByOrderCode(orderCode);
@@ -96,5 +102,15 @@ public class OrderServiceImpl implements OrderService {
         orderEntryDao.deleteByOrderId(id);
         // Затем удаляем сам заказ
         return orderDao.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void updateOrderStatus(long orderId, OrderStatus status) {
+        log.info("Обновление статуса заказа {} на {}", orderId, status);
+        int updated = orderDao.updateStatus(orderId, status);
+        if (updated == 0) {
+            throw new RuntimeException("Не удалось обновить статус заказа с id: " + orderId);
+        }
     }
 }

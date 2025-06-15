@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Каталог книг</title>
@@ -13,6 +13,14 @@
 
         <div class="d-flex justify-content-between mb-4">
             <a th:href="@{/books/top-selling}" class="btn btn-outline-success">Популярные книги</a>
+            <div>
+                <a th:href="@{/books/top-selling}" class="btn btn-outline-success me-2">Популярные книги</a>
+                <a th:href="@{/orders/my}" class="btn btn-outline-primary">Заказ</a>
+            </div>
+            <form th:action="@{/books/search}" method="get" class="d-flex">
+                <input type="text" name="title" class="form-control me-2" placeholder="Поиск по названию">
+                <button type="submit" class="btn btn-outline-primary">Поиск</button>
+            </form>
         </div>
 
         <div class="alert alert-info" th:if="${bookPage.content.isEmpty()}">

@@ -1,6 +1,7 @@
 package com.example.bookshop.dao;
 
 import com.example.bookshop.model.Order;
+import com.example.bookshop.model.OrderStatus;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -51,6 +52,15 @@ public interface OrderDao {
     List<Order> findByUserId(long userId);
 
     /**
+     * Найти заказы пользователя по статусам
+     *
+     * @param userId   идентификатор пользователя
+     * @param statuses список статусов
+     * @return список заказов пользователя с указанными статусами
+     */
+    List<Order> findByUserIdAndStatusIn(long userId, List<OrderStatus> statuses);
+
+    /**
      * Найти заказ по коду заказа
      *
      * @param orderCode код заказа
@@ -82,6 +92,15 @@ public interface OrderDao {
      * @return обновленный заказ
      */
     Order update(Order order);
+
+    /**
+     * Обновить статус заказа
+     *
+     * @param id     идентификатор заказа
+     * @param status новый статус
+     * @return количество обновленных записей
+     */
+    int updateStatus(long id, OrderStatus status);
 
     /**
      * Удалить заказ по ID

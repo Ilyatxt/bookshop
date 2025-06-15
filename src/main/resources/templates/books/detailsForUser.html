@@ -72,6 +72,7 @@
             <h1 th:text="${book.title}">Название книги</h1>
             <p class="lead" th:text="${book.description}">Описание книги</p>
             <a th:href="@{/orders/buy/{id}(id=${book.id})}" class="btn btn-primary me-2">Купить</a>
+            <a th:href="@{/orders/my}" class="btn btn-outline-primary me-2">Заказ</a>
             <a th:href="@{/books/user/books}" class="btn btn-outline-secondary">Назад к списку</a>
             </div>
         </div>

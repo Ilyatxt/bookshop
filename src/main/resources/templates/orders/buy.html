@@ -19,6 +19,7 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Добавить в заказ</button>
+        <a th:href="@{/orders/my}" class="btn btn-outline-primary">Заказ</a>
         <a th:href="@{/books/user/{id}(id=${book.id})}" class="btn btn-secondary">Отмена</a>
     </form>
 </div>
