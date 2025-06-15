@@ -183,6 +183,16 @@ public class BookServiceImpl implements BookService {
         return books;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<Book> getBooksByGenre(String genreName, int page, int size) {
+        log.debug("Получение книг жанра {}: страница={}, размер={}", genreName, page, size);
+        List<Book> books = bookDao.findByGenre(genreName, page, size);
+        long total = bookDao.countByGenre(genreName);
+        log.debug("Найдено {} книг жанра {} из {}", books.size(), genreName, total);
+        return new PageResponse<>(books, page, size, total);
+    }
+
 
     private List<Long> getAuthorIdsFromAuthors(List<Author> authors) {
         if (authors == null) {

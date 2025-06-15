@@ -237,6 +237,27 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    public List<Book> findByGenre(String genreName, int pageNumber, int pageSize) {
+        int offset = pageNumber * pageSize;
+        String sql = "SELECT b.* FROM books b " +
+                "JOIN book_genres bg ON b.id = bg.book_id " +
+                "JOIN genres g ON bg.genre_id = g.id " +
+                "WHERE LOWER(g.name) = LOWER(?) " +
+                "ORDER BY b.title LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, bookRowMapper, genreName, pageSize, offset);
+    }
+
+    @Override
+    public long countByGenre(String genreName) {
+        String sql = "SELECT COUNT(*) FROM books b " +
+                "JOIN book_genres bg ON b.id = bg.book_id " +
+                "JOIN genres g ON bg.genre_id = g.id " +
+                "WHERE LOWER(g.name) = LOWER(?)";
+        Long count = jdbcTemplate.queryForObject(sql, Long.class, genreName);
+        return count != null ? count : 0L;
+    }
+
+    @Override
     public List<Book> findByAuthorId(long authorId) {
         String sql = "SELECT b.* FROM books b " +
                 "JOIN book_authors ba ON b.id = ba.book_id " +

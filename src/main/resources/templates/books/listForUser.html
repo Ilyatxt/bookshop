@@ -10,6 +10,7 @@
     <div th:replace="fragments/header :: header"></div>
     <div class="container mt-5">
         <h1>Каталог книг</h1>
+        <h4 th:if="${selectedGenre}" class="text-muted">Жанр: <span th:text="${selectedGenre}"></span></h4>
 
         <div class="d-flex justify-content-between mb-4">
             <a th:href="@{/books/top-selling}" class="btn btn-outline-success">Популярные книги</a>
@@ -39,6 +40,9 @@
                         <p class="card-text text-truncate" th:text="${book.description}">Описание книги</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="badge bg-primary" th:text="${book.price} + ' ' + ${book.currency}">Цена</span>
+                        </div>
+                        <div class="mt-2 d-flex flex-wrap gap-1" th:if="${book.genres}">
+                            <a th:each="g : ${book.genres}" th:href="@{/books/user/genre/{name}(name=${g})}" class="badge bg-success text-decoration-none">[[${g}]]</a>
                         </div>
                     </div>
                     <div class="card-footer">

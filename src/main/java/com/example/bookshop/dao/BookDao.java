@@ -147,6 +147,24 @@ public interface BookDao {
     boolean removeGenreFromBook(long bookId, long genreId);
 
     /**
+     * Получить книги по названию жанра с пагинацией
+     *
+     * @param genreName название жанра
+     * @param pageNumber номер страницы
+     * @param pageSize   размер страницы
+     * @return список книг выбранного жанра
+     */
+    List<Book> findByGenre(String genreName, int pageNumber, int pageSize);
+
+    /**
+     * Получить количество книг указанного жанра
+     *
+     * @param genreName название жанра
+     * @return количество книг
+     */
+    long countByGenre(String genreName);
+
+    /**
      * Найти все книги автора
      *
      * @param authorId идентификатор автора

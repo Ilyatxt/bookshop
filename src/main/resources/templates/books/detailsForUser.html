@@ -32,10 +32,11 @@
         </div>
         <div class="card-body">
             <div class="d-flex flex-wrap gap-2">
-                <span th:each="genre : ${book.genres}" 
-                     class="badge bg-success p-2 fs-6">
+                <a th:each="genre : ${book.genres}"
+                   th:href="@{/books/user/genre/{name}(name=${genre})}"
+                   class="badge bg-success p-2 fs-6 text-decoration-none">
                     <span th:text="${genre}">Жанр</span>
-                </span>
+                </a>
             </div>
         </div>
     </div>
