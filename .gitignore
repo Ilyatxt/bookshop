@@ -1,7 +1,8 @@
 ### Smart Tomcat Plugin ###
 .smarttomcat/
 smarttomcat/
-
+bash
+   git rm -r --cached .idea logs .smarttomcat
 ### Maven ###
 /target/
 !.mvn/wrapper/maven-wrapper.jar
