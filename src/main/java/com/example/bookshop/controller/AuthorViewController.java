@@ -5,6 +5,7 @@ import com.example.bookshop.model.Author;
 import com.example.bookshop.service.AuthorService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.facade.AuthorFacade;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class AuthorViewController {
     /**
      * Страница всех авторов
      */
+    @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping
     public String getAllAuthors(@RequestParam(defaultValue = "0", name = "page") int page,
                                 @RequestParam(defaultValue = "10", name = "size") int size,
@@ -43,6 +45,7 @@ public class AuthorViewController {
     /**
      * Страница автора по ID
      */
+    @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping("/{id}")
     public String getAuthorById(@PathVariable(name = "id") long id, Model model) {
         Author author = authorService.getAuthorById(id);
@@ -72,9 +75,29 @@ public class AuthorViewController {
         return "authors/search";
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/user/authors")
+    public String getAuthorsForUser(@RequestParam(defaultValue = "0", name = "page") int page,
+                                    @RequestParam(defaultValue = "10", name = "size") int size,
+                                    Model model) {
+        PageResponse<Author> authorPage = authorFacade.getAllAuthors(page, size);
+        model.addAttribute("authorPage", authorPage);
+        return "authors/listForUser";
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/user/{id}")
+    public String getAuthorForUser(@PathVariable(name = "id") long id, Model model) {
+        Author author = authorService.getAuthorById(id);
+        model.addAttribute("author", author);
+        model.addAttribute("books", bookService.getBooksByAuthorId(id));
+        return "authors/detailsForUser";
+    }
+
     /**
      * Страница создания нового автора
      */
+    @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("author", new Author());
@@ -84,6 +107,7 @@ public class AuthorViewController {
     /**
      * Обработка создания нового автора
      */
+    @PreAuthorize("hasRole('MODERATOR')")
     @PostMapping
     public String createAuthor(@ModelAttribute Author author) {
         Author savedAuthor = authorService.createAuthor(author);
@@ -93,6 +117,7 @@ public class AuthorViewController {
     /**
      * Страница редактирования автора
      */
+    @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable(name = "id") long id, Model model) {
         model.addAttribute("author", authorService.getAuthorById(id));
@@ -102,6 +127,7 @@ public class AuthorViewController {
     /**
      * Обработка обновления автора
      */
+    @PreAuthorize("hasRole('MODERATOR')")
     @PostMapping("/{id}")
     public String updateAuthor(@PathVariable(name = "id") long id, @ModelAttribute Author author) {
         authorService.updateAuthor(id, author);
@@ -111,6 +137,7 @@ public class AuthorViewController {
     /**
      * Обработка удаления автора
      */
+    @PreAuthorize("hasRole('MODERATOR')")
     @PostMapping("/{id}/delete")
     public String deleteAuthor(@PathVariable(name = "id") long id) {
         authorService.deleteAuthor(id);

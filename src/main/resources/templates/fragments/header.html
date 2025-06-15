@@ -17,7 +17,8 @@
                     <ul class="dropdown-menu" aria-labelledby="sectionsDropdown">
                         <li><a class="dropdown-item" th:href="@{/books/top-selling}">Популярные</a></li>
                         <li><a class="dropdown-item" th:href="@{/genres}">Жанры</a></li>
-                        <li><a class="dropdown-item" th:href="@{/authors}">Авторы</a></li>
+                        <li><a class="dropdown-item" th:href="@{/authors}" sec:authorize="hasRole('MODERATOR') or hasRole('ADMIN')">Авторы</a></li>
+                        <li><a class="dropdown-item" th:href="@{/authors/user/authors}" sec:authorize="hasRole('USER')">Авторы</a></li>
                     </ul>
                 </li>
             </ul>
