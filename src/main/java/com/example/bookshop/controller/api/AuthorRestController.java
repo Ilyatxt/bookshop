@@ -1,6 +1,6 @@
 package com.example.bookshop.controller.api;
 
-import com.example.bookshop.dao.AuthorDao;
+import com.example.bookshop.facade.AuthorFacade;
 import com.example.bookshop.model.Author;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +20,10 @@ import java.util.Map;
 @RequestMapping("/api/authors")
 public class AuthorRestController {
 
-    private final AuthorDao authorDao;
+    private final AuthorFacade authorFacade;
 
-    public AuthorRestController(AuthorDao authorDao) {
-        this.authorDao = authorDao;
+    public AuthorRestController(AuthorFacade authorFacade) {
+        this.authorFacade = authorFacade;
     }
 
     /**
@@ -36,7 +36,7 @@ public class AuthorRestController {
     public ResponseEntity<List<Map<String, Object>>> searchAuthors(@RequestParam("q") String query) {
         List<Map<String, Object>> result = new ArrayList<>();
 
-        List<Author> authors = authorDao.findByName(query, 0, 10);
+        List<Author> authors = authorFacade.searchAuthorsByName(query);
         for (Author author : authors) {
             Map<String, Object> map = new HashMap<>();
             map.put("id", author.getId());

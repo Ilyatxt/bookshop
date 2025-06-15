@@ -51,6 +51,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<java.util.Map<String, Object>> searchGenres(String query) {
+        return bookDao.searchGenres(query);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Book> getAllBooks() {
         log.debug("Получение списка всех книг");
         List<Book> books = bookDao.findAll();
