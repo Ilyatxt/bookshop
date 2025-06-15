@@ -23,7 +23,7 @@
             <h2 th:text="${author.id == 0 ? 'Новый автор' : 'Редактирование автора'}">Автор</h2>
         </div>
         <div class="card-body">
-            <form th:action="@{${author.id == 0} ? '/authors' : '/authors/' + author.id}" method="post" th:object="${author}">
+            <form th:action="@{${author.id == 0 ? '/authors' : '/authors/' + author.id}}" method="post" th:object="${author}">
                 <div class="mb-3">
                     <label for="firstName" class="form-label">Имя</label>
                     <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required>
