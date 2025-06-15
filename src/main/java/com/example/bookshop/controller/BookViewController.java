@@ -75,8 +75,8 @@ public class BookViewController {
     @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping("/genre/{name}")
     public String getBooksByGenre(@PathVariable("name") String genre,
-                                  @RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "10") int size,
+                                  @RequestParam(defaultValue = "0", name = "page") int page,
+                                  @RequestParam(defaultValue = "10", name = "size") int size,
                                   Model model) {
         PageResponse<Book> bookPage = bookService.getBooksByGenre(genre, page, size);
         model.addAttribute("page", bookPage);
@@ -87,8 +87,8 @@ public class BookViewController {
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/user/genre/{name}")
     public String getBooksByGenreForUser(@PathVariable("name") String genre,
-                                         @RequestParam(defaultValue = "0") int page,
-                                         @RequestParam(defaultValue = "10") int size,
+                                         @RequestParam(defaultValue = "0", name = "page") int page,
+                                         @RequestParam(defaultValue = "10", name = "size") int size,
                                          Model model) {
         PageResponse<Book> bookPage = bookService.getBooksByGenre(genre, page, size);
         model.addAttribute("bookPage", bookPage);
